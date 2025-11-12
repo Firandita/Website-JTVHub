@@ -9,9 +9,9 @@
         
         <div class="hidden md:flex items-center gap-6 font-medium">
           <a href="#" class="text-orange-500 font-bold">Home</a>
-          <a href="#" class="hover:text-orange-300 transition-colors">Live</a>
-          <a href="#" class="hover:text-orange-300 transition-colors">Video</a>
-          <a href="#" class="hover:text-orange-300 transition-colors">Event</a>
+          <a href="/live" class="hover:text-orange-300 transition-colors">Live</a>
+          <a href="/video" class="hover:text-orange-300 transition-colors">Video</a>
+          <a href="/event" class="hover:text-orange-300 transition-colors">Event</a>
           <a href="#" class="flex items-center hover:text-orange-300 transition-colors">
             More
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-1">
