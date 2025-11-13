@@ -10,6 +10,7 @@
         </RouterLink>
 
         <div class="hidden md:flex items-center gap-6 font-medium">
+
           <RouterLink
             to="/"
             class="hover:text-orange-300 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold"
