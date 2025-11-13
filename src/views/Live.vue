@@ -84,7 +84,7 @@ const toggleFullscreen = () => {
 
             <div class="flex-grow w-full md:flex-grow-0 md:w-1/2 mt-4 md:mt-0">
               <div class="relative">
-                <input
+                <!-- <input
                   type="text"
                   placeholder="Ketik sesuatu..."
                   class="w-full bg-gray-700 rounded-full py-2 px-5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -106,7 +106,7 @@ const toggleFullscreen = () => {
                       d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Z"
                     />
                   </svg>
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
