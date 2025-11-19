@@ -39,7 +39,7 @@ const daftarProgram = ref([
 </script>
 
 <template>
-  <div class="container mx-auto px-6 py-16 relative">
+  <div class="container mx-auto px-6 py-16 pb-32 relative">
     
     <div class="h-1 bg-gradient-to-r from-teal-400 via-yellow-300 to-pink-500 mb-12"></div>
     

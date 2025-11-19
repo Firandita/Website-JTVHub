@@ -1,1 +1,40 @@
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "tailwindcss";
+
+/* ROOT */
+:root {
+    
+/* Warna */
+/* Orange */
+--primary: #FF6600; 
+
+/* Dark grey */
+--surface: #121212; 
+
+/* Magenta */
+--brand: #E6427B;
+
+/* Navy */
+--secondary: #0f2d52;
+
+/* Cyan */
+--info: #00b0ad;
+
+/* Soft */
+--soft: #ec9bac;
+
+/* Font Custom */
+  --font-family: "Roboto", sans-serif;
+}
+
+/* MAIN */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  overflow-x: hidden;
+  list-style: none;
+}

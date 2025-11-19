@@ -21,7 +21,7 @@ defineProps({
       <p class="text-sm text-gray-400 mb-4">{{ event.date }}</p>
       
       <div class="flex space-x-2">
-        <button class="flex-1 py-2 text-sm font-medium text-center text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition duration-150 shadow-md">
+        <button class="flex-1 py-2 text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-yellow-700 transition duration-150 shadow-md">
           Lihat Detail
         </button>
         <button class="flex-1 py-2 text-sm font-medium text-center text-yellow-500 bg-gray-900 border border-yellow-500 rounded-lg hover:bg-yellow-500 hover:text-black transition duration-150">

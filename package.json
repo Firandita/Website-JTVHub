@@ -10,6 +10,8 @@
     "tailwind:init": "node node_modules/tailwindcss/lib/cli.js init"
   },
   "dependencies": {
+    "aos": "^2.3.4",
+    "hls.js": "^1.6.15",
     "swiper": "^12.0.3",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
@@ -18,9 +20,9 @@
     "@tailwindcss/postcss": "^4.1.15",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-vue": "^6.0.1",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.10",
     "vite": "^7.1.7"
   }
 }

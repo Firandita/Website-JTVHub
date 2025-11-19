@@ -1,11 +1,13 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import CategoryItem from "../components/CategoryItem.vue";
 import VideoCard from "../components/VideoCard.vue";
+import { useRoute } from 'vue-router';
 
-// --- KUMPULAN DATA ---
+const route = useRoute();
 
-// 1. Data Kategori (Sidebar Kiri)
+// --- DATA ---
+
 const videoCategories = ref([
   { name: "News", img: "/KategoriVideo/news.png" },
   { name: "Komedi", img: "/KategoriVideo/komedi.png" },
@@ -15,22 +17,19 @@ const videoCategories = ref([
   { name: "Olahraga", img: "/KategoriVideo/olahraga.png" },
 ]);
 
-// 2. (BARU) Data Sub-Kategori
-//    Ini adalah daftar "tab" untuk SETIAP kategori utama
 const subCategories = ref({
   News: ["Pojok Kampung", "Pojok Pitu", "Jatim Awan"],
   Komedi: ["Cak Lontong", "Srimulat"],
   Musik: ["Stasiun Dangdut", "Jazz Traffic"],
   Religi: ["Ustadz X", "Ustadz Y"],
+  Talkshow: ["Show A", "Show B"], // Tambahkan default data untuk menghindari error
+  Olahraga: ["Bola", "Basket"],     // Tambahkan default data untuk menghindari error
 });
 
-// 3. (UPGRADE) "Master List" SEMUA video
-//    Kita tambahkan properti 'subCategory'
 const allVideos = ref([
-  // Kategori News
   {
     id: 1, 
-    title: 'Arek Lanang Kelemon Dievakuasi', // (Judul dari screenshot-mu)
+    title: 'Arek Lanang Kelemon Dievakuasi', 
     category: 'News', 
     subCategory: 'Pojok Kampung', 
     status: 'Telah Tayang', 
@@ -46,46 +45,22 @@ const allVideos = ref([
     thumbnail: "...",
   },
   {
-    id: 3,
-    title: "Berita 3",
-    category: "News",
-    subCategory: "Jatim Awan",
-    thumbnail: "...",
-  },
-  {
-    id: 4,
-    title: "Berita 4",
-    category: "News",
-    subCategory: "Pojok Kampung",
-    thumbnail: "...",
-  },
-  // Kategori Komedi
-  {
     id: 5,
     title: "Cak Lontong Eps 1",
     category: "Komedi",
     subCategory: "Cak Lontong",
     thumbnail: "...",
   },
-  {
-    id: 6,
-    title: "Srimulat Jadul",
-    category: "Komedi",
-    subCategory: "Srimulat",
-    thumbnail: "...",
-  },
+  // ... tambahkan data video lainnya sesuai kebutuhan
 ]);
 
-// --- LOGIC (OTAK) HALAMAN ---
+// --- STATE ---
 
-// 4. (STATE 1) Kategori Utama yang Aktif
-const activeCategoryName = ref("News"); // Set 'News' sebagai default
+const activeCategoryName = ref("News"); 
+const activeSubCategoryName = ref("Pojok Kampung");
 
-// 5. (STATE 2) Sub-Kategori yang Aktif
-const activeSubCategoryName = ref("Pojok Kampung"); // Set 'Pojok Kampung' sebagai default
+// --- COMPUTED ---
 
-// 6. (UPGRADE) Fungsi "Sihir" (Computed)
-//    Sekarang mem-filter berdasarkan DUA state
 const filteredVideos = computed(() => {
   return allVideos.value.filter(
     (video) =>
@@ -94,22 +69,41 @@ const filteredVideos = computed(() => {
   );
 });
 
-// 7. (BARU) Computed untuk mengambil daftar tab yang benar
 const currentSubCategoryTabs = computed(() => {
   return subCategories.value[activeCategoryName.value] || [];
 });
 
-// 8. (FUNGSI AKSI 1) Saat Sidebar Kiri diklik
+// --- FUNGSI ---
+
 function handleCategoryClick(category) {
   activeCategoryName.value = category.name;
-  // (PENTING) Reset sub-kategori ke 'default' (tab pertama)
-  activeSubCategoryName.value = subCategories.value[category.name][0];
+  // Reset sub-kategori ke tab pertama saat kategori utama diklik
+  if (subCategories.value[category.name]) {
+    activeSubCategoryName.value = subCategories.value[category.name][0];
+  }
 }
 
-// 9. (FUNGSI AKSI 2) Saat Tab Kanan Atas diklik
 function handleSubCategoryClick(subCategory) {
   activeSubCategoryName.value = subCategory;
 }
+
+// --- LOGIKA PENYAMBUNG (PENTING) ---
+
+onMounted(() => {
+  const kategoriDariUrl = route.query.kategori;
+
+  // Cek: Apakah ada kategori di URL? DAN Apakah kategori itu ada di data kita?
+  if (kategoriDariUrl && subCategories.value[kategoriDariUrl]) {
+    
+    // 1. Ubah Kategori Utama (Misal: jadi 'Komedi')
+    activeCategoryName.value = kategoriDariUrl;
+
+    // 2. OTOMATIS Ubah Sub-Kategori ke yang pertama (Misal: jadi 'Cak Lontong')
+    // Tanpa ini, halaman akan mencari 'Pojok Kampung' di dalam 'Komedi', hasilnya kosong.
+    activeSubCategoryName.value = subCategories.value[kategoriDariUrl][0];
+  }
+});
+  
 </script>
 
 <template>
@@ -131,7 +125,7 @@ function handleSubCategoryClick(subCategory) {
       </div>
     </header>
 
-    <main class="container mx-auto px-16 py-10">
+    <main class="container mx-auto px-4 md:px-16 py-10">
     
       <section class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div class="lg:col-span-1">
@@ -152,12 +146,12 @@ function handleSubCategoryClick(subCategory) {
             <h2 class="text-xl font-bold text-center uppercase tracking-widest text-white">{{ activeCategoryName }}</h2>
           </div>
 
-          <div class="flex items-center gap-2 mb-6">
+          <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
             <button
               v-for="subCat in currentSubCategoryTabs"
               :key="subCat"
               @click="handleSubCategoryClick(subCat)"
-              class="px-4 py-1.5 rounded-full text-sm font-semibold transition-colors"
+              class="px-4 py-1.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap"
               :class="
                 activeSubCategoryName === subCat
                   ? 'bg-orange-600 text-white'

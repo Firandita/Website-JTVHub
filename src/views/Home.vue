@@ -33,7 +33,7 @@ const videoCategories = [
   <VideoSlider />
 
   <section class="mb-12">
-        <h2 class="text-xl font-bold mb-5 text-gray-300">Sedang Berlangsung</h2>
+        <h2 class="text-xl font-family font-bold mb-5 text-gray-300">Sedang Berlangsung</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <EventCard 
             v-for="event in ongoingEvents.slice(0, 4)"
