@@ -91,7 +91,13 @@ onUnmounted(() => {
           <input id="searchInput" v-model="searchQuery" type="text" placeholder="Cari..." class="bg-transparent border-none outline-none text-white text-sm placeholder-white/50 transition-all duration-300" :class="isSearchOpen ? 'w-32 md:w-48 ml-2 opacity-100' : 'w-0 opacity-0'"/>
         </div>
 
-        <button class="hidden lg:block bg-gradient-to-r from-orange-400 to-orange-600 px-6 py-2 rounded-lg font-family font-semibold hover:opacity-90 transition-opacity text-sm">Login</button>
+        <RouterLink 
+          to="/login" 
+          class="hidden lg:block bg-gradient-to-r from-orange-400 to-orange-600 px-6 py-2 rounded-lg font-family font-semibold hover:opacity-90 transition-opacity text-sm"        >
+          Login
+        </RouterLink>
+
+        <!-- <button class="hidden lg:block bg-gradient-to-r from-orange-400 to-orange-600 px-6 py-2 rounded-lg font-family font-semibold hover:opacity-90 transition-opacity text-sm">Login</button> -->
 
         <button @click="toggleMobileMenu" class="lg:hidden p-2 w-10 h-10 flex justify-center items-center rounded-full bg-white/10 hover:bg-white/20 transition-colors z-50">
           <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -113,8 +119,16 @@ onUnmounted(() => {
         <RouterLink to="/community" @click="toggleMobileMenu" class="block py-2 hover:text-orange-400 text-center text-lg font-family font-medium aria-[current=page]:text-orange-500">JTV Community</RouterLink>
         <RouterLink to="/social" @click="toggleMobileMenu" class="block py-2 hover:text-orange-400 text-center text-lg font-family font-medium aria-[current=page]:text-orange-500">Social Media</RouterLink>
 
+        <RouterLink 
+          to="/login" 
+          @click="toggleMobileMenu"
+          class="w-full mt-4 bg-gradient-to-r from-orange-400 to-orange-600 py-3 rounded-lg font-family font-bold text-center shadow-lg"
+        >
+          Login
+        </RouterLink>
+
         <!-- Belum bikin halaman login -->
-        <button @click="toggleMobileMenu" class="w-full mt-4 bg-gradient-to-r from-orange-400 to-orange-600 py-3 rounded-lg font-family font-bold text-center shadow-lg">Login</button>
+        <!-- <button @click="toggleMobileMenu" class="w-full mt-4 bg-gradient-to-r from-orange-400 to-orange-600 py-3 rounded-lg font-family font-bold text-center shadow-lg">Login</button> -->
       </div>
     </transition>
 

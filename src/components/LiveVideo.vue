@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import Hls from 'hls.js';
 
 const props = defineProps({
@@ -10,26 +10,48 @@ const videoPlayer = ref(null);
 const containerRef = ref(null);
 let hls = null;
 
-onMounted(() => {
+const initPlayer = () => {
   const video = videoPlayer.value;
+  if (!video) return;
+
+  // Bersihkan instance lama jika ada
+  if (hls) hls.destroy();
+
+  // Cek apakah browser support HLS Native (Safari) atau butuh Hls.js (Chrome/Firefox)
   if (Hls.isSupported()) {
     hls = new Hls();
     hls.loadSource(props.streamUrl);
     hls.attachMedia(video);
+    
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(e => console.log("Autoplay blocked:", e));
+        // Browser modern memblokir suara otomatis, jadi harus di-mute dulu biar bisa autoplay
+        video.play().catch(e => console.log("Autoplay blocked (User must interact first):", e));
     });
+
+    // Penanganan Error biar gak diem aja kalau link putus
     hls.on(Hls.Events.ERROR, function (event, data) {
         if (data.fatal) {
+            console.log("Stream Error, mencoba reconnect...");
             hls.startLoad();
         }
     });
+
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Khusus Safari (iPhone/Mac)
     video.src = props.streamUrl;
     video.addEventListener('loadedmetadata', () => {
       video.play();
     });
   }
+};
+
+onMounted(() => {
+  initPlayer();
+});
+
+// Kalau link berubah, restart player
+watch(() => props.streamUrl, () => {
+  initPlayer();
 });
 
 onUnmounted(() => {
@@ -39,28 +61,41 @@ onUnmounted(() => {
 
 <template>
   <div class="flex flex-col gap-4">
-    <div ref="containerRef" class="relative w-full bg-black rounded-xl overflow-hidden shadow-lg group aspect-video border border-gray-800">
-      
-      <video ref="videoPlayer" class="w-full h-full object-cover" controls autoplay muted playsinline></video>
 
-      <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded flex items-center gap-2 animate-pulse z-10">
+    <!-- Video -->
+    <div ref="containerRef" class="relative w-full bg-black overflow-hidden shadow-lg group aspect-video border border-gray-800">
+      
+      <video 
+        ref="videoPlayer" 
+        class="w-full h-full object-cover" 
+        controls 
+        autoplay 
+        muted 
+        playsinline
+      ></video>
+
+      <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded flex items-center gap-2 animate-pulse z-10 pointer-events-none">
         <span class="w-2 h-2 bg-white rounded-full"></span> LIVE
       </div>
 
     </div>
+    <!-- Video end -->
 
-    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
+    <!-- Deskripsi Tayangan -->
+    <div class="mt-8">
       <div class="flex justify-between items-start">
         <div>
-          <p class="text-orange-500 text-sm font-semibold mb-1 tracking-wider">SEDANG TAYANG</p>
-          <h1 class="text-2xl md:text-3xl font-bold text-white mb-2 font-sans">Stasiun Dangdut</h1>
           
-          <p class="text-gray-400 text-sm font-sans flex items-center gap-2">
+          <div class="bg-red-600 w-fit px-1 py-1 rounded mb-2 flex items-center justify-center">
+          <p class="text-white text-[10px] font-bold tracking-widest uppercase">SEDANG TAYANG
+          </p>
+          </div>
+
+          <!-- untuk judul tayangan ini masih dummy -->
+          <h1 class="text-2xl md:text-3xl font-bold text-white mb-2 font-sans">Pojok Arena</h1>
+          
+          <p class="text-white text-sm font-sans font-medium flex items-center gap-2">
             <span>22.00 - 23.30 WIB</span>
-            <span class="text-gray-600">•</span>
-            <span class="flex items-center gap-1 text-red-500 font-semibold">
-              12.5K Menonton
-            </span>
           </p>
         </div>
         
@@ -77,9 +112,11 @@ onUnmounted(() => {
         </div>
         <div>
           <h3 class="font-bold text-white font-sans text-lg">JTV Rek</h3>
-          <p class="text-xs text-gray-500">Official Broadcaster</p>
+          <p class="text-xs text-orange-400">12.2k Menonton</p>
         </div>
       </div>
     </div>
+    <!-- Deskripsi tayangan end -->
+
   </div>
 </template>

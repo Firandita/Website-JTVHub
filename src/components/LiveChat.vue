@@ -13,7 +13,8 @@ const chats = ref([
 </script>
 
 <template>
-  <div class="bg-[#0f1e38] border border-gray-700 rounded-xl flex flex-col h-[600px] lg:sticky lg:top-24 shadow-2xl"> <div class="p-4 border-b border-gray-700 bg-gray-800/50 rounded-t-xl flex justify-between items-center">
+  <div class="bg-gradient-to-b from-gray-900 to-gray-800  3 flex flex-col rounded-b-xl h-[600px] lg:sticky lg:top-24 shadow-2xl">
+    <div class="p-4 border-b border-gray-700 bg-gray-800/50 flex justify-between items-center">
       <h3 class="font-bold text-white flex items-center gap-2">
         Live Chat
         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -30,12 +31,20 @@ const chats = ref([
         <div v-if="!isLoggedIn" class="mt-8 p-6 bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-600 text-center">
             <p class="text-gray-300 mb-4 font-medium">Gabung obrolan sekarang!</p>
             <div class="flex flex-col gap-3">
-                <button class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg font-bold hover:opacity-90 transition">
+
+                <RouterLink 
+                    to="/login" 
+                    class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg font-bold hover:opacity-90 transition text-center block"
+                >
                     Login Akun
-                </button>
-                <button class="w-full border border-orange-500 text-orange-500 py-2 rounded-lg font-bold hover:bg-orange-500 hover:text-white transition">
+                </RouterLink>
+
+                <RouterLink 
+                    to="/login?mode=register" 
+                    class="w-full border border-orange-500 text-orange-500 py-2 rounded-lg font-bold hover:bg-orange-500 hover:text-white transition text-center block"
+                >
                     Daftar Baru
-                </button>
+                </RouterLink>
             </div>
         </div>
     </div>
