@@ -1,3 +1,4 @@
+ 
 <script setup>
 import EventCard from '../components/EventCard.vue';
 import CategoryItem from '../components/CategoryItem.vue';
@@ -187,6 +188,7 @@ const videos = {
     </main>
   </div>
 
+<<<<<<< HEAD
   <!-- MODAL POSTER -->
   <div 
     v-if="showPosterModal" 
@@ -225,3 +227,6 @@ const videos = {
   </div>
 
 </template>
+=======
+</template>
+>>>>>>> 7faecfd16efc195b4e191878dcbfbf991ce362e9

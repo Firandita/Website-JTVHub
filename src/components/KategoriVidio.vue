@@ -1,39 +1,65 @@
-<template>
-    <div class="container mx-auto px-6 py-16">
-        <h2 class="text-3xl font-bold mb-8">Kategori Video</h2>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-8">
-            <div 
-            v-for="kategori in daftarKategori"
-            :key="kategori.nama"
-            class="flex flex-col items-center gap-3 cursor-pointer group">
-
-            <div class="w-28 h-28 md:w-32 bg-gray-700 rounded-full
-            flex items-center justify-center
-            transition-all duration-300
-            group-hover:bg-orange-500 group-hover:scale-105">
-            </div>
-        
-            <p class="text-lg font-semibold">{{ kategori.nama }}</p>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup>
-import {ref} from 'vue';
+import { ref, onMounted } from 'vue';
+import AOS from 'aos';
+import { useRouter } from 'vue-router';
+import 'aos/dist/aos.css';
 
-//ini data dummy, 
-// kita buat sebuah array data langsung di sini.
-//nanti, data ini akan kita ambil dari "services" /API
+const router = useRouter(); 
+
 const daftarKategori = ref([
-{nama: 'News'},
-{nama: 'Komedi'},
-{nama: 'Musik'},
-{nama: 'Religi'},
-{nama: 'Talkshow'},
-{nama: 'Olahraga'},
+  { nama: "News", img: "/KategoriVideo/news.png" },
+  { nama: "Komedi", img: "/KategoriVideo/komedi.png" },
+  { nama: "Musik", img: "/KategoriVideo/musik.png" },
+  { nama: "Religi", img: "/KategoriVideo/religi.png" },
+  { nama: "Talkshow", img: "/KategoriVideo/talkshow.png" },
+  { nama: "Olahraga", img: "/KategoriVideo/olahraga.png" },
 ]);
+
+const keHalamanVideo = (namaKategori) => {
+  router.push({
+    path: '/video',
+    query: { kategori: namaKategori } 
+  });
+};
+
+onMounted(() => {
+  AOS.init({
+    once: true,
+    duration: 800,
+    offset: 100,
+  });
+});
 </script>
+
+<template>
+  <div class="container mx-auto px-6 py-16 pb-20">
+    <h2 
+      data-aos="fade-up"
+      class="text-3xl font-family font-bold mb-16 text-center">
+      Kategori Video
+    </h2>
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-8">
+      <div
+        v-for="(kategori, index) in daftarKategori"
+        :key="kategori.nama"
+        @click="keHalamanVideo(kategori.nama)"
+        data-aos="fade-up"
+        :data-aos-delay="index * 100"
+        class="flex flex-col items-center gap-3 cursor-pointer group"
+      >
+        <img 
+            :src="kategori.img" 
+            :alt="kategori.nama"
+            class="w-full h-full md:w-32 md:h-32 bg-white rounded-full group-hover:scale-105 transition-all duration-300" 
+        />
+    
+        <p class="text-lg font-semibold group-hover:font-bold group-hover:text-orange-500 transition-all duration-300">
+          {{ kategori.nama }}
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 </style>

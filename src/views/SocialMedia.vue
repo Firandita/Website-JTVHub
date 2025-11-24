@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script setup>
 const officialJTV = [
   { name: 'Facebook', handle: 'JTV Official', logoUrl: '/logo-medsos/fb.png', link: 'https://facebook.com/jtvofficial' },
@@ -174,3 +175,8 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 </style>
+=======
+<template>
+    
+</template>
+>>>>>>> 7faecfd16efc195b4e191878dcbfbf991ce362e9
