@@ -2,7 +2,8 @@
 export default {
   content: [
     "./index.html",
-    "./src/*/.{vue,js,ts,jsx,tsx}",
+    // Ganti yang lama dengan pola REKURSIF ini:
+    "./src/**/*.{vue,js,ts,jsx,tsx}", 
   ],
   theme: {
     extend: {},

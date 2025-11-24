@@ -18,7 +18,6 @@ const emit = defineEmits(['selectCategory']);
 </script>
 
 <template>
-<<<<<<< HEAD
   <a
     class="flex items-center space-x-3 p-3 rounded-lg transition duration-150 cursor-pointer"
     :class="active 
