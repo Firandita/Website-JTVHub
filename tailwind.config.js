@@ -9,8 +9,12 @@ export default {
     extend: {
       // Ini warna custom JTVHub kamu
       colors: {
-        'jtv-orange': '#FF6600',
-        'jtv-dark': '#121212',
+        'primary': '#FF6600', //orange
+        'surface': '#121212', // hitam
+        'brand': '#E6427B', //magenta
+        'secondary': '#0F2D52', //navy
+        'info': '#00B0AD', //cyan
+        'soft': '#EC9BAC', //pink soft
       },
     },
   },

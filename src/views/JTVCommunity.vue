@@ -1,16 +1,23 @@
 <script setup>
-// Anda bisa mengimpor komponen MagangCard atau sejenisnya di sini jika diperlukan,
-// tetapi untuk kesederhanaan, kita akan membuat kontennya langsung.
-
 // Data Dummy untuk Magang dan Karir
 const careerItems = [
-  { title: 'Magang', description: 'Deskripsi singkat mengenai kesempatan magang di JTV Hub.' },
-  { title: 'Magang', description: 'Deskripsi singkat lain mengenai kesempatan magang atau karir.' },
+  { 
+    title: 'Magang', 
+    description: 'Deskripsi singkat mengenai kesempatan magang di JTV Hub.',
+    buttonText: 'Daftar Magang',
+    url: '/magang'
+  },
+  { 
+    title: 'Kunjungan', 
+    description: 'Deskripsi singkat lain mengenai kesempatan magang atau karir.',
+    buttonText: 'Daftar Kunjungan',
+    url: '/kunjungan'
+  },
 ];
 </script>
 
 <template>
-  <div class="min-h-screen bg-black text-white font-sans">
+  <div class="min-h-screen bg-black text-white font-roboto">
     
     <header class="bg-gray-800 h-56 flex items-center justify-center p-8">
       <h1 class="text-3xl md:text-4xl font-semibold text-gray-300">
@@ -25,18 +32,23 @@ const careerItems = [
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          <div v-for="(item, index) in careerItems" :key="index" 
-               class="bg-gray-900 rounded-xl shadow-xl overflow-hidden">
-            <div class="h-48 bg-gray-700/50 flex items-center justify-center">
-                          </div>
+          <div 
+            v-for="(item, index) in careerItems" 
+            :key="index" 
+            class="bg-gray-900 rounded-xl shadow-xl overflow-hidden"
+          >
+            <div class="h-48 bg-gray-700/50 flex items-center justify-center"></div>
             
             <div class="p-6">
-              <h3 class="text-xl font-bold text-white-500 mb-2">{{ item.title }}</h3>
+              <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
               <p class="text-gray-400 mb-4 text-sm">{{ item.description }}</p>
               
-              <button class="px-5 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-600 transition duration-150">
-                Lihat Detail
-              </button>
+              <RouterLink 
+                :to="item.url"
+                class="px-5 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition duration-150 inline-block"
+              >
+                {{ item.buttonText }}
+              </RouterLink>
             </div>
           </div>
           
@@ -57,11 +69,11 @@ const careerItems = [
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
               <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Gabung ke Grup
+                Join WA Group
               </button>
             </div>
           </div>
-          
+
           <div class="bg-gray-900 rounded-xl overflow-hidden">
             <div class="h-40 bg-gray-700/50 flex items-center justify-center">
               [Placeholder Konten 2]
@@ -69,11 +81,11 @@ const careerItems = [
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
               <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Gabung ke Grup
+                Join WA Group
               </button>
             </div>
           </div>
-          
+
           <div class="bg-gray-900 rounded-xl overflow-hidden">
             <div class="h-40 bg-gray-700/50 flex items-center justify-center">
               [Placeholder Konten 3]
@@ -81,7 +93,7 @@ const careerItems = [
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
               <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Gabung ke Grup
+                Join WA Group
               </button>
             </div>
           </div>
@@ -93,11 +105,11 @@ const careerItems = [
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
               <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Gabung ke Grup
+                Join WA Group
               </button>
             </div>
           </div>
-          
+
         </div>
       </section>
 
@@ -119,5 +131,5 @@ const careerItems = [
       
     </main>
 
-    </div>
+  </div>
 </template>
