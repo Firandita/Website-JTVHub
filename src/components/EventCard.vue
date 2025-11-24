@@ -17,7 +17,6 @@ const emit = defineEmits(['lihatPoster']);
     </div>
 
     <div class="p-4">
-<<<<<<< HEAD
 
       <p class="text-orange-400 text-xs font-bold mb-1">
         {{ event.type.toUpperCase() }}
@@ -39,15 +38,6 @@ const emit = defineEmits(['lihatPoster']);
           @click="emit('lihatPoster', event.poster)"
         >
           Lihat Poster
-=======
-      <p class="text-xs text-yellow-400 uppercase font-semibold">{{ event.type }}</p>
-      <h3 class="text-lg font-bold truncate mb-2">{{ event.title }}</h3>
-      <p class="text-sm text-gray-400 mb-4">{{ event.date }}</p>
-      
-      <div class="flex space-x-2">
-        <button class="flex-1 py-2 text-sm font-medium text-center text-white bg-primary rounded-lg hover:bg-yellow-700 transition duration-150 shadow-md">
-          Lihat Detail
->>>>>>> 7faecfd16efc195b4e191878dcbfbf991ce362e9
         </button>
 
         <!-- DAFTAR (MENUJU LINK) -->

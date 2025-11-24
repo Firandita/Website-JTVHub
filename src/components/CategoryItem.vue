@@ -1,10 +1,6 @@
 <script setup>
 // 1. Tentukan "Props" (data) apa yang dia terima dari induk
 defineProps({
-<<<<<<< HEAD
-  category: { type: Object, required: true },
-  active: { type: Boolean, default: false }
-=======
   category: {
     type: Object,
     required: true
@@ -14,7 +10,7 @@ defineProps({
     type: Boolean,
     default: false
   }
->>>>>>> 7faecfd16efc195b4e191878dcbfbf991ce362e9
+
 });
 
 // 2. Tentukan "Emits" (sinyal) apa yang dia kirim ke induk
@@ -50,24 +46,3 @@ const emit = defineEmits(['selectCategory']);
     </span>
   </a>
 </template>
-=======
-  <button 
-    @click="emit('selectCategory', category)"
-    class="w-full flex items-center gap-3 p-2 rounded-lg transition-all duration-200"
-    :class="isActive ? 'bg-orange-500/20 text-orange-400' : 'hover:bg-gray-800'"
-  >
-    <img
-      v-if="category.img"
-      :src="category.img"
-      :alt="category.name"
-      class="w-8 h-8 object-cover rounded flex-shrink-0"
-    />
-    <div
-      v-else
-      class="w-8 h-8 rounded bg-gray-700 flex-shrink-0"
-    ></div>
-    
-    <span class="font-semibold">{{ category.name }}</span>
-  </button>
-</template>
->>>>>>> 7faecfd16efc195b4e191878dcbfbf991ce362e9
