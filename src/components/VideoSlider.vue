@@ -1,114 +1,145 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-// 1. Impor Swiper & modul Navigasi (untuk panah)
+// 1. Impor Swiper & modul Navigasi
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 
 // 2. Impor CSS Swiper
 import 'swiper/css';
-import 'swiper/css/navigation'; // <-- Impor CSS untuk Navigasi
+import 'swiper/css/navigation';
 
-// 3. Daftarkan modul Navigasi
-const modules = [Navigation];
+const router = useRouter();
 
-// siapkan data dummy. Perhatikan properti 'thumbnail'.
-// pakai placeholder dulu. Nanti kamu tinggal ganti URL-nya.
+// 3. Daftarkan modul
+const modules = [Navigation, Autoplay];
+
+// === DATA PROGRAM ===
 const daftarProgram = ref([
-  { 
-    id: 1, 
-    judul: 'Pojok Pitu', 
-    thumbnail: 'https://placehold.co/400x300/6b7280/ffffff?text=Pojok+Pitu' 
-  },
-  { 
-    id: 2, 
-    judul: 'Stasiun Dangdut', 
-    thumbnail: 'https://placehold.co/400x300/6b7280/ffffff?text=Stasiun+Dangdut' 
-  },
-  { 
-    id: 3, 
-    judul: 'Pojok Kampung', 
-    thumbnail: 'https://placehold.co/400x300/6b7280/ffffff?text=Pojok+Kampung' 
-  },
-  { 
-    id: 4, 
-    judul: 'Program Lain', 
-    thumbnail: 'https://placehold.co/400x300/6b7280/ffffff?text=Program+Lain' 
-  },
+  { id: 1, name: 'Pojok Kampung', category: 'News', image: '/VideoSlider/berita.png' },
+  { id: 2, name: 'Pojok Pitu', category: 'News', image: '/VideoSlider/berita.png' },
+  { id: 3, name: 'Jatim Awan', category: 'News', image: '/VideoSlider/berita.png' },
+  { id: 4, name: 'Ngopi Sek', category: 'Komedi', image: '/VideoSlider/berita.png' },
+  { id: 5, name: 'Semar Mesem', category: 'Komedi', image: '/VideoSlider/berita.png' },
+  { id: 6, name: 'Ndoro Bei', category: 'Komedi', image: '/VideoSlider/berita.png' },
+  { id: 7, name: 'Stasiun Dangdut', category: 'Musik', image: '/VideoSlider/berita.png' },
+  { id: 8, name: 'Padange Ati', category: 'Religi', image: '/VideoSlider/berita.png' },
+  { id: 9, name: 'Ngaji Blusukan', category: 'Religi', image: '/VideoSlider/berita.png' },
+  { id: 10, name: 'Mancing Bois', category: 'Olahraga', image: '/VideoSlider/berita.png' },
 ]);
+
+const goToProgram = (program) => {
+  router.push({ 
+    path: '/video', 
+    query: { kategori: program.category, sub: program.name } 
+  });
+};
 </script>
 
 <template>
-  <div class="container mx-auto px-6 py-16 pb-32 relative">
+  <section class="max-w-6xl mx-auto px-4 md:px-8 py-12 mb-20">
     
-    <div class="h-1 bg-gradient-to-r from-teal-400 via-yellow-300 to-pink-500 mb-12"></div>
-    
-    <h2 class="text-3xl font-bold mb-8 text-center">Program</h2>
-    
-    <swiper
-      :modules="modules"
-      :navigation="{
-        prevEl: '.prev-arrow',
-        nextEl: '.next-arrow',
-      }"
-      :loop="true"
-      :slidesPerView="1"
-      :spaceBetween="30"
-      :centeredSlides="true"
-      :breakpoints="{
-        768: {
-          slidesPerView: 3,
-        }
-      }"
-      class="pb-10"
+    <h2 
+      data-aos="fade-up"
+      class="text-2xl font-family font-bold mb-16 text-center"
     >
-      <swiper-slide 
-        v-for="program in daftarProgram" 
-        :key="program.id"
-        class="program-slide"
-      >
-        <img 
-          :src="program.thumbnail" 
-          :alt="program.judul"
-          class="w-full h-auto aspect-video object-cover rounded-lg shadow-lg bg-gray-700"
-        >
-        
-        <p class="text-center font-semibold text-lg mt-4">{{ program.judul }}</p>
-
-      </swiper-slide>
-    </swiper>
+      Berbagai <span class="text-orange-600">Program</span> Menarik Siap 
+      <br class="hidden md:block"> 
+      Menghibur <span class="text-orange-600">Anda!</span>
+    </h2>
     
-    <div class="prev-arrow absolute top-1/2 -left-4 z-10 cursor-pointer">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-10 h-10 text-orange-500 hover:text-orange-400">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-      </svg>
-    </div>
-    <div class="next-arrow absolute top-1/2 -right-4 z-10 cursor-pointer">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-10 h-10 text-orange-500 hover:text-orange-400">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-      </svg>
-    </div>
+    <div class="relative group">
+      
+      <swiper
+        :modules="modules"
+        :navigation="{
+          prevEl: '.prev-arrow',
+          nextEl: '.next-arrow',
+        }"
+        :loop="true"
+        :autoplay="{
+          delay: 3000,
+          disableOnInteraction: false,
+        }"
+        :centeredSlides="true"
+        :spaceBetween="30"
+        :breakpoints="{
+          320: { slidesPerView: 1.2, spaceBetween: 15 },
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 3, spaceBetween: 30 }
+        }"
+        class="pb-12 !overflow-visible" 
+      >
+        <swiper-slide 
+          v-for="program in daftarProgram" 
+          :key="program.id"
+          class="program-slide group cursor-pointer"
+          @click="goToProgram(program)"
+        >
+          <div class="relative overflow-hidden rounded-2xl aspect-video bg-gray-800 shadow-2xl border border-gray-700 transition-all duration-300">
+            
+            <img 
+              :src="program.image" 
+              :alt="program.name"
+              onerror="this.src='https://placehold.co/600x400/1e1e1e/FFF?text=No+Image'"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            >
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90"></div>
 
-    <div class="h-1 bg-gradient-to-r from-teal-400 via-yellow-300 to-pink-500 mt-12"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5">
+              <span class="text-xs font-bold text-orange-400 uppercase tracking-wider mb-2 block">
+                {{ program.category }}
+              </span>
+              <h3 class="text-xl md:text-2xl font-bold text-white leading-tight group-hover:text-orange-200 transition-colors">
+                {{ program.name }}
+              </h3>
+            </div>
 
-  </div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
+               <div class="w-14 h-14 bg-orange-600 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(234,88,12,0.5)] transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                  </svg>
+               </div>
+            </div>
+
+          </div>
+        </swiper-slide>
+      </swiper>
+      
+      <div class="prev-arrow absolute top-1/2 left-2 md:-left-12 z-20 cursor-pointer bg-gray-900/80 hover:bg-orange-600 border border-gray-700 p-3 rounded-full transition-all duration-300 shadow-lg -translate-y-1/2 -mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+      </div>
+
+      <div class="next-arrow absolute top-1/2 right-2 md:-right-12 z-20 cursor-pointer bg-gray-900/80 hover:bg-orange-600 border border-gray-700 p-3 rounded-full transition-all duration-300 shadow-lg -translate-y-1/2 -mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+
+    </div> </section>
 </template>
 
 <style scoped>
-/* Kita buat slide yang tidak aktif jadi sedikit
-  mengecil dan transparan.
-*/
 .program-slide {
-  opacity: 0.6;
   transform: scale(0.9);
-  transition: opacity 0.3s, transform 0.3s;
+  opacity: 0.5;
+  transition: all 0.5s ease;
+  filter: blur(1px);
 }
 
-/* Slide yang aktif akan jadi 100% opacity 
-  dan ukurannya normal.
-*/
 .swiper-slide-active {
+  transform: scale(1.05);
   opacity: 1;
-  transform: scale(1);
+  filter: blur(0);
+  z-index: 20;
+}
+
+.swiper {
+  overflow: visible !important; 
 }
 </style>

@@ -1,47 +1,48 @@
 <script setup>
-// 1. Tentukan "Props" (data) apa yang dia terima dari induk
+// 1. Tentukan "Props" yang diterima dari induk
 defineProps({
   category: {
     type: Object,
     required: true
   },
-  // Kita tambahkan prop 'isActive' untuk tahu apakah tombol ini sedang aktif
   isActive: {
     type: Boolean,
     default: false
   }
-
 });
 
-// 2. Tentukan "Emits" (sinyal) apa yang dia kirim ke induk
+// 2. Define Emits
 const emit = defineEmits(['selectCategory']);
 </script>
 
 <template>
-  <a
-    class="flex items-center space-x-3 p-3 rounded-lg transition duration-150 cursor-pointer"
-    :class="active 
-      ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-lg' 
-      : 'hover:bg-gray-700/50'"
+  <div
+    @click="emit('selectCategory', category)"
+    class="group flex items-center space-x-3 p-2 rounded-xl transition-all duration-300 cursor-pointer"
+    :class="isActive 
+      ? 'bg-gray-800 shadow-md' 
+      : 'hover:bg-gray-800/50'"
   >
-    <!-- ICON -->
     <div
-      class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shadow-md"
-      :class="[
-        // Gradasi icon sesuai Figma
-        'bg-gradient-to-br from-[#FFB457] via-[#FF8A00] to-[#FF6A00]',
-        active ? 'ring-2 ring-white ring-offset-2 ring-offset-blue-500' : ''
-      ]"
+      class="w-10 h-10 rounded-full p-0.5 transition-all duration-300 flex items-center justify-center"
+      :class="isActive
+        ? 'bg-gradient-to-br from-yellow-400 to-orange-600 shadow-[0_0_10px_rgba(243,109,33,0.6)] scale-105'
+        : 'bg-gray-800 group-hover:bg-gray-600'"
     >
-      {{ category.icon }}
+      <img 
+        :src="category.img" 
+        :alt="category.name"
+        class="w-full h-full rounded-full object-cover border border-gray-900/50"
+      />
     </div>
 
-    <!-- TEXT -->
     <span 
-      class="text-sm font-medium"
-      :class="active ? 'text-white' : 'text-gray-300'"
+      class="text-sm font-medium transition-colors duration-300"
+      :class="isActive 
+        ? 'text-white font-bold' 
+        : 'text-gray-400 group-hover:text-gray-200'"
     >
       {{ category.name }}
     </span>
-  </a>
+  </div>
 </template>
