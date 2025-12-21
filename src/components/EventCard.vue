@@ -10,19 +10,23 @@ const emit = defineEmits(['lihatPoster']);
 </script>
 
 <template>
-  <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg border border-gray-700">
+  <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg border border-gray-700 flex flex-col h-full">
 
-    <div class="bg-gray-700 h-40 flex items-center justify-center text-gray-400 text-sm">
-      [Gambar Event]
+    <div class="relative h-48 w-full bg-gray-800">
+      <img 
+        :src="event.poster" 
+        :alt="event.title"
+        class="w-full h-full object-cover object-top"
+        @error="(e) => e.target.src = '/HACKATON.jpeg'"
+      />
     </div>
 
-    <div class="p-4">
-
+    <div class="p-4 flex flex-col flex-grow">
       <p class="text-orange-400 text-xs font-bold mb-1">
-        {{ event.type.toUpperCase() }}
+        {{ event.type?.toUpperCase() }}
       </p>
 
-      <h3 class="text-lg font-semibold text-white leading-tight">
+      <h3 class="text-lg font-semibold text-white leading-tight min-h-[3rem]">
         {{ event.title }}
       </h3>
 
@@ -30,9 +34,7 @@ const emit = defineEmits(['lihatPoster']);
         {{ event.date }}
       </p>
 
-      <div class="flex flex-col mt-4 space-y-3">
-
-        <!-- LIHAT POSTER -->
+      <div class="flex flex-col mt-auto pt-4 space-y-3">
         <button
           class="bg-orange-500 text-black py-2 rounded-lg font-semibold hover:bg-orange-400 transition"
           @click="emit('lihatPoster', event.poster)"
@@ -40,7 +42,6 @@ const emit = defineEmits(['lihatPoster']);
           Lihat Poster
         </button>
 
-        <!-- DAFTAR (MENUJU LINK) -->
         <a
           :href="event.link"
           target="_blank"
@@ -48,9 +49,7 @@ const emit = defineEmits(['lihatPoster']);
         >
           Daftar
         </a>
-
       </div>
-
     </div>
   </div>
 </template>

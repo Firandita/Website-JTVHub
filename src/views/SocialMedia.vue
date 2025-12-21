@@ -28,26 +28,15 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
   <div class="min-h-screen bg-black text-white font-roboto">
 
     <!-- HEADER -->
-    <header
-      class="relative h-72 overflow-hidden flex items-center justify-center p-4"
-      style="background: linear-gradient(135deg, #071F44 0%, #1a3b68 70%, #104e8b 100%);"
-    >
-      <div class="absolute inset-0 opacity-10 bg-repeat"></div>
-
-      <div class="z-10 text-center">
-        <h1 class="text-5xl md:text-6xl font-black tracking-tight text-white mb-2 shadow-text">
-          TERHUBUNG DENGAN KAMI
-        </h1>
-        <p class="text-xl text-gray-200 font-light">
-          Jelajahi Dunia JTV melalui semua platform kami.
-        </p>
-      </div>
+    <header class="relative h-64 md:h-80 bg-[#0F2D52] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
+        <h1 class="text-4xl md:text-6xl font-bold text-white relative z-10 tracking-wider">SOCIAL MEDIA</h1>
     </header>
 
     <main class="container mx-auto px-4 py-16">
 
       <!-- PLATFORM RESMI JTV -->
-      <section class="mb-25">
+      <section class="container mx-auto px-4 md:px-16 py-10">
         <h2 class="text-3xl font-extrabold mb-8 text-left text-orange-400 pb-2">
           PLATFORM RESMI JTV
         </h2>
@@ -87,7 +76,7 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
       </section>
 
       <!-- PORTAL JTV -->
-      <section class="mb-25">
+      <section class="container mx-auto px-4 md:px-16 py-10">
         <h2 class="text-3xl font-extrabold mb-8 text-left text-blue-400 pb-2">
           PORTAL JTV
         </h2>
@@ -127,7 +116,7 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
       </section>
 
       <!-- STASIUN DANGDUT -->
-      <section class="mb-25">
+      <section class="container mx-auto px-4 md:px-16 py-10">
         <h2 class="text-3xl font-extrabold mb-8 text-left text-pink-400 pb-2">
           STASIUN DANGDUT
         </h2>

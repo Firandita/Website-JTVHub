@@ -35,7 +35,7 @@ const ongoingEvents = [
     date: 'Hari, dd-mm-yy',
     link: 'https://link-pendaftaran-1.com',
     poster: {
-      image: 'https://via.placeholder.com/600x400/FF5733/FFFFFF?text=Hackathon+Poster+1',
+      image: 'HACKATON.jpeg',
       title: 'Hackathon Kuadran 4.0',
       description: 'Detail poster Hackathon Kuadran 4.0'
     }
@@ -152,18 +152,16 @@ const getEmbedUrl = (link) => {
 
 <template>
   <div class="min-h-screen bg-black text-white font-roboto">
-    <header
-      class="relative h-64 md:h-80 bg-cover bg-center overflow-hidden"
-      style="background-image: url('/event.png');"
-    >
-      <div class="absolute inset-0 z-10 bg-black opacity-10" />
+    <header class="relative h-64 md:h-80 bg-[#0F2D52] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
+        <h1 class="text-4xl md:text-6xl font-bold text-white relative z-10 tracking-wider">EVENT</h1>
     </header>
 
     <main class="container mx-auto px-4 py-10">
 
       <section class="mb-12">
-        <h2 class="text-3xl font-extrabold mb-5 text-orange-500 border-b-2 border-gray-800 pb-2">
-          🔥 Sedang Berlangsung
+        <h2 class="font-family text-center text-3xl font-medium mb-16 text-white-500 border-gray-800 pb-2">
+          Sedang Berlangsung
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

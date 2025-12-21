@@ -21,10 +21,9 @@ const careerItems = [
 <template>
   <div class="min-h-screen bg-black text-white font-roboto">
     
-    <header class="bg-gray-800 h-56 flex items-center justify-center p-8">
-      <h1 class="text-3xl md:text-4xl font-semibold text-gray-300">
-        Selamat datang di halaman JTV Community
-      </h1>
+    <header class="relative h-64 md:h-80 bg-[#0F2D52] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
+        <h1 class="text-4xl md:text-6xl font-bold text-white relative z-10 tracking-wider">JTV COMMUNITY</h1>
     </header>
 
     <main class="container mx-auto px-4 py-12">
