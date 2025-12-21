@@ -1,13 +1,15 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute } from 'vue-router';
 import CategoryItem from "../components/CategoryItem.vue";
 import VideoCard from "../components/VideoCard.vue";
-import { useRoute } from 'vue-router';
+
+// Import data dari folder Data
+import { videos as allDatabaseVideos } from "../data/videos.js";
 
 const route = useRoute();
 
-// --- DATA ---
-
+// Kategori
 const videoCategories = ref([
   { name: "News", img: "/KategoriVideo/news.png" },
   { name: "Komedi", img: "/KategoriVideo/komedi.png" },
@@ -17,167 +19,195 @@ const videoCategories = ref([
   { name: "Olahraga", img: "/KategoriVideo/olahraga.png" },
 ]);
 
+// Sub Kategori
 const subCategories = ref({
   News: ["Pojok Kampung", "Pojok Pitu", "Jatim Awan"],
-  Komedi: ["Cak Lontong", "Srimulat"],
-  Musik: ["Stasiun Dangdut", "Jazz Traffic"],
-  Religi: ["Ustadz X", "Ustadz Y"],
-  Talkshow: ["Show A", "Show B"], // Tambahkan default data untuk menghindari error
-  Olahraga: ["Bola", "Basket"],     // Tambahkan default data untuk menghindari error
+  Komedi: ["Ngopi Sek", "Semar Mesem", "Ndoro bei"],
+  Musik: ["Stasiun Dangdut"],
+  Religi: ["Padange Ati", "Ngaji Blusukan"],
+  Talkshow: ["Ruang Karir", "Hukum ditengah kita", "Podcast jatim"], 
+  Olahraga: ["Mancing Bois"],     
 });
 
-const allVideos = ref([
-  {
-    id: 1, 
-    title: 'Arek Lanang Kelemon Dievakuasi', 
-    category: 'News', 
-    subCategory: 'Pojok Kampung', 
-    status: 'Telah Tayang', 
-    statusColor: 'bg-orange-600',
-    thumbnail: '/ThumbnailVideo/arek_lanang_kelemon.png',
-    youtubeUrl: 'https://youtu.be/Gh3TNTWAsSs?si=yDdkKCFRV0kqZmyS'
-  },
-  {
-    id: 2,
-    title: "Berita 2",
-    category: "News",
-    subCategory: "Pojok Pitu",
-    thumbnail: "...",
-  },
-  {
-    id: 5,
-    title: "Cak Lontong Eps 1",
-    category: "Komedi",
-    subCategory: "Cak Lontong",
-    thumbnail: "...",
-  },
-  // ... tambahkan data video lainnya sesuai kebutuhan
-]);
-
 // --- STATE ---
-
 const activeCategoryName = ref("News"); 
 const activeSubCategoryName = ref("Pojok Kampung");
+const searchQuery = ref(""); 
 
-// --- COMPUTED ---
+// Config Load More
+const initialCount = 8; 
+const visibleCount = ref(initialCount); 
 
-const filteredVideos = computed(() => {
-  return allVideos.value.filter(
-    (video) =>
-      video.category === activeCategoryName.value &&
-      video.subCategory === activeSubCategoryName.value
+// --- FILTER DATA VIDEO ---
+const currentVideos = computed(() => {
+  return allDatabaseVideos.filter(video => {
+    return video.category === activeCategoryName.value && 
+           video.subCategory === activeSubCategoryName.value;
+  });
+});
+
+// --- FILTER PENCARIAN ---
+const searchedVideos = computed(() => {
+  if (!searchQuery.value) return currentVideos.value;
+  
+  const query = searchQuery.value.toLowerCase();
+  return currentVideos.value.filter(video => 
+    video.title.toLowerCase().includes(query)
   );
 });
 
-const currentSubCategoryTabs = computed(() => {
-  return subCategories.value[activeCategoryName.value] || [];
+// --- LOGIC TAMPILAN (LOAD MORE) ---
+const visibleVideos = computed(() => {
+  return searchedVideos.value.slice(0, visibleCount.value); 
 });
 
-// --- FUNGSI ---
+const showLoadMoreBtn = computed(() => {
+  return visibleCount.value < searchedVideos.value.length;
+});
 
-function handleCategoryClick(category) {
-  activeCategoryName.value = category.name;
-  // Reset sub-kategori ke tab pertama saat kategori utama diklik
-  if (subCategories.value[category.name]) {
-    activeSubCategoryName.value = subCategories.value[category.name][0];
+const showShowLessBtn = computed(() => {
+  return visibleCount.value >= searchedVideos.value.length && searchedVideos.value.length > initialCount;
+});
+
+const currentSubCategoryTabs = computed(() => subCategories.value[activeCategoryName.value] || []);
+
+// --- FUNCTIONS ---
+function handleCategoryClick(categoryObj) {
+  activeCategoryName.value = categoryObj.name;
+  if (subCategories.value[categoryObj.name]) {
+    activeSubCategoryName.value = subCategories.value[categoryObj.name][0];
   }
+  resetState(); 
 }
 
 function handleSubCategoryClick(subCategory) {
   activeSubCategoryName.value = subCategory;
+  resetState(); 
 }
 
-// --- LOGIKA PENYAMBUNG (PENTING) ---
+function resetState() {
+  visibleCount.value = initialCount;
+  searchQuery.value = ""; 
+}
+
+function loadMore() {
+  visibleCount.value += 12;
+}
+
+function showLess() {
+  visibleCount.value = initialCount;
+  document.getElementById('video-content-area')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+watch(searchQuery, () => {
+  visibleCount.value = initialCount;
+});
 
 onMounted(() => {
-  const kategoriDariUrl = route.query.kategori;
-
-  // Cek: Apakah ada kategori di URL? DAN Apakah kategori itu ada di data kita?
-  if (kategoriDariUrl && subCategories.value[kategoriDariUrl]) {
-    
-    // 1. Ubah Kategori Utama (Misal: jadi 'Komedi')
-    activeCategoryName.value = kategoriDariUrl;
-
-    // 2. OTOMATIS Ubah Sub-Kategori ke yang pertama (Misal: jadi 'Cak Lontong')
-    // Tanpa ini, halaman akan mencari 'Pojok Kampung' di dalam 'Komedi', hasilnya kosong.
-    activeSubCategoryName.value = subCategories.value[kategoriDariUrl][0];
-  }
+  const catUrl = route.query.kategori;
+  if (catUrl && subCategories.value[catUrl]) handleCategoryClick({ name: catUrl });
 });
-  
 </script>
 
 <template>
-  <div class="min-h-screen bg-black text-white font-sans">
-    <header
-      class="relative h-64 md:h-80 bg-cover bg-center overflow-hidden bg-[#0d1a33]"
-    >
-      <div
-        class="absolute inset-0 z-10 opacity-70 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"
-      ></div>
-      <div class="absolute inset-0 z-20 flex items-center justify-center">
-        <div class="p-6 border-2 border-white max-w-fit mx-auto">
-          <h1
-            class="text-6xl md:text-8xl font-extrabold tracking-widest uppercase text-white"
-          >
-            VIDEO
-          </h1>
-        </div>
-      </div>
+  <div class="min-h-screen text-white font-sans">
+    
+    <header class="relative h-64 md:h-80 bg-[#0F2D52] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
+        <h1 class="text-4xl md:text-6xl font-bold text-white relative z-10 tracking-wider">VIDEO </h1>
     </header>
 
-    <main class="container mx-auto px-4 md:px-16 py-10">
-    
-      <section class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div class="lg:col-span-1">
-          <h2 class="text-xl font-bold mb-4 text-gray-300 ">Kategori Video</h2>
-          <nav class="space-y-1 p-0">
-            <CategoryItem
-              v-for="category in videoCategories"
-              :key="category.name"
-              :category="category"
-              :isActive="category.name === activeCategoryName"
-              @selectCategory="handleCategoryClick"
-            />
-          </nav>
+    <main class="container mx-auto px-4 md:px-8 py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+        
+        <div class="lg:col-span-3">
+          <div class="sticky"> 
+            <h2 class="text-xl font-bold mb-6 text-white pl-2 border-l-4 border-orange-500">
+              Kategori Video
+            </h2>
+            <div class="space-y-2">
+               <CategoryItem
+                  v-for="cat in videoCategories"
+                  :key="cat.name"
+                  :category="cat"
+                  :isActive="activeCategoryName === cat.name"
+                  @selectCategory="handleCategoryClick"
+               />
+            </div>
+          </div>
         </div>
 
-        <div class="lg:col-span-3">
-          <div class="bg-gray-800 p-3 mb-6 rounded-lg border-b-4 border-gray-700">
-            <h2 class="text-xl font-bold text-center uppercase tracking-widest text-white">{{ activeCategoryName }}</h2>
+        <div class="lg:col-span-9" id="video-content-area">
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                v-for="subCat in currentSubCategoryTabs"
+                :key="subCat"
+                @click="handleSubCategoryClick(subCat)"
+                class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all border"
+                :class="activeSubCategoryName === subCat ? 'bg-orange-600 border-orange-600 text-white shadow-md' : 'bg-[#1e1e1e] border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white'"
+              >
+                {{ subCat }}
+              </button>
+            </div>
+
+            <div class="relative w-full md:w-64">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <input 
+                v-model="searchQuery"
+                type="text" 
+                class="block w-full py-2 pl-10 pr-3 text-sm text-white bg-[#1e1e1e] border border-gray-700 rounded-full focus:ring-orange-500 focus:border-orange-500 placeholder-gray-500 transition-all shadow-sm outline-none" 
+                placeholder="Cari video..." 
+              />
+              <button 
+                v-if="searchQuery" 
+                @click="searchQuery = ''"
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
           </div>
-
-          <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
-            <button
-              v-for="subCat in currentSubCategoryTabs"
-              :key="subCat"
-              @click="handleSubCategoryClick(subCat)"
-              class="px-4 py-1.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap"
-              :class="
-                activeSubCategoryName === subCat
-                  ? 'bg-orange-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              "
-            >
-              {{ subCat }}
-            </button>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <p
-              v-if="filteredVideos.length === 0"
-              class="text-gray-400 col-span-3"
-            >
-              Belum ada video di kategori ini.
-            </p>
-
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 min-h-[300px]">
+            
+            <div v-if="visibleVideos.length === 0" class="col-span-full text-center py-20 text-gray-500">
+               <div v-if="searchQuery">
+                 <p class="text-lg">Tidak ada video: <span class="text-orange-500 font-bold">"{{ searchQuery }}"</span></p>
+               </div>
+               <div v-else>
+                 <p>Belum ada video di kategori ini.</p>
+               </div>
+            </div>
+            
             <VideoCard
-              v-for="video in filteredVideos"
+              v-for="video in visibleVideos"
               :key="video.id"
               :video="video"
             />
           </div>
+
+          <div class="flex justify-center mt-12 pt-8 border-t border-gray-800" v-if="showLoadMoreBtn || showShowLessBtn">
+            <button v-if="showLoadMoreBtn" @click="loadMore" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors">
+                <span class="text-sm font-bold tracking-widest uppercase">Tampilkan Lebih Banyak</span>
+                <div class="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-orange-500 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </div>
+            </button>
+            <button v-if="showShowLessBtn" @click="showLess" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors">
+                <span class="text-sm font-bold tracking-widest uppercase">Tampilkan Lebih Sedikit</span>
+                <div class="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-orange-500 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                </div>
+            </button>
+          </div>
+
         </div>
-      </section>
+      </div>
     </main>
   </div>
 </template>

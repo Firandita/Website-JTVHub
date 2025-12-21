@@ -35,8 +35,9 @@ onMounted(() => {
   <div class="container mx-auto px-6 py-16 pb-20">
     <h2 
       data-aos="fade-up"
-      class="text-3xl font-family font-bold mb-16 text-center">
-      Kategori Video
+      class="text-2xl font-family font-bold mb-16 text-center">
+    <span class="text-orange-600">Temukan</span> Kategori <span class="text-orange-600">Video </span>
+      Yang Ingin <br><span class="text-orange-600">Anda </span> Tonton!
     </h2>
     <div class="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-8">
       <div

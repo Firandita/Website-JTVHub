@@ -7,18 +7,17 @@ const isSearchOpen = ref(false);
 const searchQuery = ref('');
 const isMobileMenuOpen = ref(false);
 
-// --- LOGIC SCROLL ---
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
 };
 
-// --- LOGIC SEARCH ---
-const toggleSearch = () => {
-  isSearchOpen.value = !isSearchOpen.value;
-  if (isSearchOpen.value) {
-    setTimeout(() => document.getElementById('searchInput').focus(), 100);
-  }
-};
+// // --- LOGIC SEARCH ---
+// const toggleSearch = () => {
+//   isSearchOpen.value = !isSearchOpen.value;
+//   if (isSearchOpen.value) {
+//     setTimeout(() => document.getElementById('searchInput').focus(), 100);
+//   }
+// };
 
 // --- LOGIC RESPONSIF (BIAR MENU TUTUP SENDIRI DI LAPTOP) ---
 const checkScreenSize = () => {
@@ -53,7 +52,7 @@ onUpdated(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('resize', checkScreenSize); // Copot sensor layar
+  window.removeEventListener('resize', checkScreenSize); 
 });
 </script>
 
@@ -77,19 +76,19 @@ onUnmounted(() => {
           <RouterLink to="/live" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">Live</RouterLink>
           <RouterLink to="/video" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">Video</RouterLink>
           <RouterLink to="/event" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">Event</RouterLink>
-          <RouterLink to="/community" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">Community</RouterLink>
+          <RouterLink to="/community" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">JTV Community</RouterLink>
           <RouterLink to="/social" class="hover:text-orange-400 transition-colors aria-[current=page]:text-orange-500 aria-[current=page]:font-bold">Social Media</RouterLink>
         </div>
       </div>
 
       <div class="flex items-center gap-3 z-50">
-        <div class="flex items-center rounded-full p-1 relative overflow-hidden transition-all duration-300"
+        <!-- <div class="flex items-center rounded-full p-1 relative overflow-hidden transition-all duration-300"
              :class="isSearchOpen ? 'pr-3 bg-white/10' : 'bg-white/10 hover:bg-white/20'">
           <button @click="toggleSearch" class="w-8 h-8 flex items-center justify-center rounded-full transition-colors flex-shrink-0" :class="isSearchOpen ? 'text-orange-100' : 'text-white'">
             <i data-feather="search" class="w-4 h-4"></i>
           </button>
           <input id="searchInput" v-model="searchQuery" type="text" placeholder="Cari..." class="bg-transparent border-none outline-none text-white text-sm placeholder-white/50 transition-all duration-300" :class="isSearchOpen ? 'w-32 md:w-48 ml-2 opacity-100' : 'w-0 opacity-0'"/>
-        </div>
+        </div> -->
 
         <RouterLink 
           to="/login" 
