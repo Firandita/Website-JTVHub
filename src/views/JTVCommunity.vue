@@ -5,13 +5,15 @@ const careerItems = [
     title: 'Magang', 
     description: 'Deskripsi singkat mengenai kesempatan magang di JTV Hub.',
     buttonText: 'Daftar Magang',
-    url: '/magang'
+    type: 'internal',               // 🔥 Untuk RouterLink
+    url: '/daftar-magang'
   },
   { 
     title: 'Kunjungan', 
-    description: 'Deskripsi singkat lain mengenai kesempatan magang atau karir.',
+    description: 'Program kunjungan langsung ke JTV untuk pelajar/mahasiswa.',
     buttonText: 'Daftar Kunjungan',
-    url: '/kunjungan'
+    type: 'external',               // 🔥 Biar jadi <a href="">
+    url: 'https://google.com'       // Ganti ke link kamu
   },
 ];
 </script>
@@ -42,13 +44,26 @@ const careerItems = [
             <div class="p-6">
               <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
               <p class="text-gray-400 mb-4 text-sm">{{ item.description }}</p>
-              
+
+              <!-- 🔥 Jika internal → RouterLink -->
               <RouterLink 
+                v-if="item.type === 'internal'"
                 :to="item.url"
                 class="px-5 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition duration-150 inline-block"
               >
                 {{ item.buttonText }}
               </RouterLink>
+
+              <!-- 🔥 Jika external → <a href> -->
+              <a 
+                v-else
+                :href="item.url"
+                target="_blank"
+                class="px-5 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700 transition duration-150 inline-block"
+              >
+                {{ item.buttonText }}
+              </a>
+
             </div>
           </div>
           
