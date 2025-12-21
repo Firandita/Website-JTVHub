@@ -5,15 +5,17 @@ const careerItems = [
     title: 'Magang', 
     description: 'Deskripsi singkat mengenai kesempatan magang di JTV Hub.',
     buttonText: 'Daftar Magang',
-    type: 'internal',               // 🔥 Untuk RouterLink
-    url: '/daftar-magang'
+    type: 'internal',               
+    url: '/daftar-magang',
+    image: '/magang.png' // <-- File gambar untuk kartu pertama
   },
   { 
     title: 'Kunjungan', 
     description: 'Program kunjungan langsung ke JTV untuk pelajar/mahasiswa.',
     buttonText: 'Daftar Kunjungan',
-    type: 'external',               // 🔥 Biar jadi <a href="">
-    url: 'https://google.com'       // Ganti ke link kamu
+    type: 'external',               
+    url: 'https://google.com',
+    image: '/karir.png' // <-- File gambar untuk kartu kedua (Ganti sesuai nama file Anda)
   },
 ];
 </script>
@@ -38,13 +40,18 @@ const careerItems = [
             :key="index" 
             class="bg-gray-900 rounded-xl shadow-xl overflow-hidden"
           >
-            <div class="h-48 bg-gray-700/50 flex items-center justify-center"></div>
+            <div class="h-48 bg-gray-800">
+              <img 
+                :src="item.image" 
+                :alt="item.title" 
+                class="w-full h-full object-cover"
+              >
+            </div>
             
             <div class="p-6">
               <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
               <p class="text-gray-400 mb-4 text-sm">{{ item.description }}</p>
 
-              <!-- 🔥 Jika internal → RouterLink -->
               <RouterLink 
                 v-if="item.type === 'internal'"
                 :to="item.url"
@@ -53,7 +60,6 @@ const careerItems = [
                 {{ item.buttonText }}
               </RouterLink>
 
-              <!-- 🔥 Jika external → <a href> -->
               <a 
                 v-else
                 :href="item.url"
@@ -76,46 +82,11 @@ const careerItems = [
         
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
           
-          <div class="bg-gray-900 rounded-xl overflow-hidden">
-            <div class="h-40 bg-gray-700/50 flex items-center justify-center">
-              [Placeholder Konten 1]
+          <div v-for="i in 4" :key="i" class="bg-gray-900 rounded-xl overflow-hidden flex flex-col">
+            <div class="h-40 bg-gray-800">
+              <img src="/member.png" alt="member" class="w-full h-full object-cover">
             </div>
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
-              <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Join WA Group
-              </button>
-            </div>
-          </div>
-
-          <div class="bg-gray-900 rounded-xl overflow-hidden">
-            <div class="h-40 bg-gray-700/50 flex items-center justify-center">
-              [Placeholder Konten 2]
-            </div>
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
-              <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Join WA Group
-              </button>
-            </div>
-          </div>
-
-          <div class="bg-gray-900 rounded-xl overflow-hidden">
-            <div class="h-40 bg-gray-700/50 flex items-center justify-center">
-              [Placeholder Konten 3]
-            </div>
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
-              <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
-                Join WA Group
-              </button>
-            </div>
-          </div>
-
-          <div class="bg-gray-900 rounded-xl overflow-hidden">
-            <div class="h-40 bg-gray-700/50 flex items-center justify-center">
-              [Placeholder Konten 4]
-            </div>
+            
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
               <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
