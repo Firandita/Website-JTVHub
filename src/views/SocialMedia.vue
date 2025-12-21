@@ -37,8 +37,8 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
 
       <!-- PLATFORM RESMI JTV -->
       <section class="container mx-auto px-4 md:px-16 py-10">
-        <h2 class="text-3xl font-extrabold mb-8 text-left text-orange-400 pb-2">
-          PLATFORM RESMI JTV
+        <h2 class="text-2xl font-bold mb-8 text-left text-white pb-2">
+          Platform Resmi JTV
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -77,8 +77,8 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
 
       <!-- PORTAL JTV -->
       <section class="container mx-auto px-4 md:px-16 py-10">
-        <h2 class="text-3xl font-extrabold mb-8 text-left text-blue-400 pb-2">
-          PORTAL JTV
+        <h2 class="text-2xl font-bold mb-8 text-left text-white pb-2">
+         Portal JTV
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -117,8 +117,8 @@ const isYouTube = (url) => url.toLowerCase().includes('yt');
 
       <!-- STASIUN DANGDUT -->
       <section class="container mx-auto px-4 md:px-16 py-10">
-        <h2 class="text-3xl font-extrabold mb-8 text-left text-pink-400 pb-2">
-          STASIUN DANGDUT
+        <h2 class="text-2xl font-bold mb-8 text-left text-white pb-2">
+          Stasiun Dangdut
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

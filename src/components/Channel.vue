@@ -1,51 +1,45 @@
 <script setup>
 import { ref, computed } from 'vue';
 
+// Menerima Props dari Parent
+const props = defineProps({
+  allChannels: {
+    type: Array,
+    required: true
+  },
+  activeChannel: {
+    type: Object,
+    required: true
+  }
+});
+
+// Emit event ke parent saat channel diklik
+const emit = defineEmits(['change-channel']);
+
 const activeTab = ref('Channel');
-const activeDay = ref('Senin'); // Default hari
-
-const channels = ref([
-  { name: 'Jawa Pos', img: 'https://placehold.co/100x50/333/fff?text=Jawa+Pos' },
-  { name: 'SBO', img: 'https://placehold.co/100x50/333/fff?text=SBO' },
-  { name: 'JTV', img: 'https://placehold.co/100x50/333/fff?text=JTV' },
-  { name: 'Radar', img: 'https://placehold.co/100x50/333/fff?text=Radar' },
-  { name: 'Malang TV', img: 'https://placehold.co/100x50/333/fff?text=MalangTV' },
-  { name: 'Sultraco', img: 'https://placehold.co/100x50/333/fff?text=Sultraco' },
-]);
-
-// 6. FIX: JADWAL PER HARI
+const activeDay = ref('Senin'); 
 const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
-const jadwalData = {
-    'Senin': [
-        { jam: '08:00', acara: 'Berita Pagi', status: 'Selesai' },
-        { jam: '18:00', acara: 'Jatim Awan', status: 'Selesai' },
-        { jam: '22:00', acara: 'Stasiun Dangdut', status: 'Live' },
-    ],
-    'Selasa': [
-        { jam: '08:00', acara: 'Kartun Anak', status: 'Akan Tayang' },
-        { jam: '19:00', acara: 'Pojok Pitu', status: 'Akan Tayang' },
-    ],
-    'Rabu': [
-        { jam: '10:00', acara: 'Masak Yuk', status: 'Akan Tayang' },
-        { jam: '22:00', acara: 'Wayang Kulit', status: 'Akan Tayang' },
-    ],
-    // ... tambahkan hari lain sesuai kebutuhan, ini dummy biar tidak error jika kosong
-    'Kamis': [], 'Jumat': [], 'Sabtu': [], 'Minggu': []
-};
+// Filter Channel berdasarkan Kategori
+const livestreamChannels = computed(() => props.allChannels.filter(c => c.category === 'Livestream'));
+const communityChannels = computed(() => props.allChannels.filter(c => c.category === 'Komunitas'));
 
+// Jadwal Dinamis berdasarkan Channel yang Aktif
 const currentSchedule = computed(() => {
-    return jadwalData[activeDay.value] || [];
+    // Mengambil jadwal dari channel yang sedang dipilih di Parent
+    const schedules = props.activeChannel.schedule || {};
+    return schedules[activeDay.value] || [];
 });
+
+const selectChannel = (channel) => {
+    emit('change-channel', channel);
+    // Opsional: pindah ke tab deskripsi atau tetap di channel
+};
 </script>
 
 <template>
-  <div class="mt-8">
+  <div class="mt-2">
     
-    <div class="w-full h-24 bg-gray-900 rounded-lg flex flex-col items-center justify-center text-gray-600 border border-gray-800 mb-8">
-      <span class="text-sm tracking-widest uppercase font-bold">Space Iklan</span>
-    </div>
-
     <div class="border-b border-gray-800 mb-6">
       <div class="flex gap-8">
         <button 
@@ -63,25 +57,47 @@ const currentSchedule = computed(() => {
 
     <div class="min-h-[200px]">
       
-      <div v-if="activeTab === 'Channel'" class="animate-fade-in">
-        <h3 class="text-lg font-bold mb-4 text-white">Channel TV Lokal</h3>
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-          <div 
-            v-for="(channel, index) in channels" 
-            :key="index" 
-            class="bg-gray-900 border border-gray-800 rounded-lg p-3 flex items-center justify-center hover:border-orange-500 hover:bg-gray-800 cursor-pointer transition-all group"
-          >
-            <img :src="channel.img" :alt="channel.name" class="w-full h-auto object-contain opacity-70 group-hover:opacity-100 transition">
-          </div>
+      <div v-if="activeTab === 'Channel'" class="animate-fade-in space-y-8">
+        
+        <div>
+            <h3 class="text-lg font-bold mb-4 text-white">Channel Livestream</h3>
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+              <div 
+                v-for="channel in livestreamChannels" 
+                :key="channel.id" 
+                @click="selectChannel(channel)"
+                class="bg-white rounded-lg p-2 aspect-video flex items-center justify-center cursor-pointer transition-all group border-2 relative"
+                :class="activeChannel.id === channel.id ? 'border-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'border-transparent hover:border-gray-300'"
+              >
+                <img :src="channel.logo" :alt="channel.name" class="w-full h-full object-contain">
+                
+                <div v-if="activeChannel.id === channel.id" class="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+              </div>
+            </div>
         </div>
+
+        <div>
+            <h3 class="text-lg font-bold mb-4 text-white">Channel Komunitas</h3>
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+              <div 
+                v-for="channel in communityChannels" 
+                :key="channel.id" 
+                @click="selectChannel(channel)"
+                class="bg-white rounded-lg p-2 aspect-video flex items-center justify-center cursor-pointer transition-all group border-2 relative"
+                :class="activeChannel.id === channel.id ? 'border-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'border-transparent hover:border-gray-300'"
+              >
+                <img :src="channel.logo" :alt="channel.name" class="w-full h-full object-contain">
+                <div v-if="activeChannel.id === channel.id" class="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+        </div>
+
       </div>
 
       <div v-if="activeTab === 'Deskripsi'" class="animate-fade-in text-gray-300 leading-relaxed">
-        <h3 class="text-xl font-bold text-white mb-2">Tentang Stasiun Dangdut</h3>
+        <h3 class="text-xl font-bold text-white mb-2">Tentang {{ activeChannel.name }}</h3>
         <p>
-            Stasiun Dangdut adalah program unggulan JTV yang menghadirkan orkes melayu terbaik dari Jawa Timur. 
-            Menampilkan penyanyi-penyanyi top lokal dengan aransemen musik yang khas dan menghibur.
-            Saksikan keseruannya setiap hari pukul 22.00 WIB hanya di JTV.
+            {{ activeChannel.description }}
         </p>
       </div>
 
@@ -92,7 +108,7 @@ const currentSchedule = computed(() => {
                 v-for="day in days" 
                 :key="day"
                 @click="activeDay = day"
-                class="px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap transition-colors border"
+                class="px-4 py-1.5 rounded-full text-sm font-family font-semibold whitespace-nowrap transition-colors border"
                 :class="activeDay === day 
                     ? 'bg-orange-600 text-white border-orange-600' 
                     : 'bg-transparent text-gray-400 border-gray-700 hover:border-gray-500'"
@@ -102,26 +118,26 @@ const currentSchedule = computed(() => {
          </div>
 
          <div class="space-y-3">
-             <div v-if="currentSchedule.length === 0" class="text-center py-8 text-gray-500 italic">
-                 Tidak ada jadwal untuk hari {{ activeDay }}.
+             <div v-if="currentSchedule.length === 0" class="text-center font-family py-8 text-gray-500 italic">
+                 Tidak ada jadwal {{ activeChannel.name }} untuk hari {{ activeDay }}.
              </div>
 
              <div v-for="(item, idx) in currentSchedule" :key="idx" 
-                  class="flex justify-between items-center p-4 rounded-lg border transition-colors"
+                  class="flex justify-between items-center p-4 rounded-lg transition-colors"
                   :class="item.status === 'Live' 
-                    ? 'bg-orange-900/20 border-orange-500/30' 
-                    : 'bg-gray-900 border-gray-800 opacity-80 hover:bg-gray-800'"
+                    ? 'bg-transparent' 
+                    : 'border-gray-800 border-b opacity-80'"
              >
                 <div class="flex items-center gap-4">
-                    <span class="font-mono text-orange-500 font-bold">{{ item.jam }}</span>
+                    <span class="font-family text-orange-500 font-bold">{{ item.jam }}</span>
                     <span class="text-white font-medium">{{ item.acara }}</span>
                 </div>
                 <span 
-                    class="text-[10px] md:text-xs px-2 py-1 rounded font-bold uppercase tracking-wider"
+                    class="text-[10px] md:text-xs px-2 py-1 rounded font-family font-medium tracking-wider"
                     :class="{
                         'bg-red-600 text-white animate-pulse': item.status === 'Live',
                         'bg-gray-700 text-gray-400': item.status === 'Selesai',
-                        'bg-blue-600 text-white': item.status === 'Akan Tayang'
+                        'bg-blue-800 text-white': item.status === 'Akan Tayang'
                     }"
                 >
                     {{ item.status }}
@@ -142,5 +158,13 @@ const currentSchedule = computed(() => {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+/* Menghilangkan scrollbar tapi tetap bisa discroll */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 </style>
