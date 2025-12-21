@@ -30,12 +30,8 @@
 }
 
 /* MAIN */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-family);
-  overflow-x: hidden;
-  list-style: none;
+/* Mencegah scroll ke samping pada seluruh halaman */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* Ini kuncinya */
 }

@@ -146,7 +146,7 @@ onMounted(() => {
                 v-for="subCat in currentSubCategoryTabs"
                 :key="subCat"
                 @click="handleSubCategoryClick(subCat)"
-                class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all border"
+                class="px-4 py-2 rounded-full text-xs font-medium tracking-wider transition-all border"
                 :class="activeSubCategoryName === subCat ? 'bg-orange-600 border-orange-600 text-white shadow-md' : 'bg-[#1e1e1e] border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white'"
               >
                 {{ subCat }}
@@ -193,13 +193,13 @@ onMounted(() => {
 
           <div class="flex justify-center mt-12 pt-8 border-t border-gray-800" v-if="showLoadMoreBtn || showShowLessBtn">
             <button v-if="showLoadMoreBtn" @click="loadMore" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors">
-                <span class="text-sm font-bold tracking-widest uppercase">Tampilkan Lebih Banyak</span>
+                <span class="text-sm font-family font-bold tracking-widest">Tampilkan Lebih Banyak</span>
                 <div class="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-orange-500 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
             </button>
             <button v-if="showShowLessBtn" @click="showLess" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-orange-500 transition-colors">
-                <span class="text-sm font-bold tracking-widest uppercase">Tampilkan Lebih Sedikit</span>
+                <span class="text-sm font-family font-bold tracking-widest">Tampilkan Lebih Sedikit</span>
                 <div class="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-orange-500 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
                 </div>

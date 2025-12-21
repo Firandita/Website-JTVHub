@@ -68,6 +68,7 @@ import { RouterLink } from "vue-router";
         ></div>
 
         <img
+          data-aos="zoom-in"
           src="/public/gambar HP JtvHub.png"
           alt="Aplikasi JTVHub"
           class="w-[400px] md:w-[500px] rounded-2xl shadow-lg transform -rotate-6 relative z-20"
