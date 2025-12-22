@@ -5,7 +5,7 @@ import CategoryItem from "../components/CategoryItem.vue";
 import VideoCard from "../components/VideoCard.vue";
 
 // Import data dari folder Data
-import { videos as allDatabaseVideos } from "../data/videos.js";
+import { videos as allDatabaseVideos } from "../Data/videos.js";
 
 const route = useRoute();
 
