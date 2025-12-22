@@ -141,7 +141,6 @@ const magangList = ref([
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-box-orient: vertical; 
-  -webkit-line-clamp: 2;
   overflow: hidden;
 }
 </style>
