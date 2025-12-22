@@ -20,7 +20,6 @@ import { RouterLink } from "vue-router";
         </p>
 
         <div class="flex flex-wrap gap-4 mt-6">
-          
           <a
             href="https://play.google.com/store/apps/details?id=com.jtvplusplus.jtv_plus_plus"
             target="_blank"
@@ -32,8 +31,15 @@ import { RouterLink } from "vue-router";
               class="w-7 h-7 object-contain group-hover:scale-110 transition-transform"
             />
 
-            <div class="flex flex-col leading-1 mt-1"> <span class="text-[10px] uppercase font-medium tracking-wider text-gray-300"> GET IT ON </span>
-              <span class="text-base font-medium font-sans mt-0.5"> Google Play </span>
+            <div class="flex flex-col leading-1 mt-1">
+              <span
+                class="text-[10px] uppercase font-medium tracking-wider text-gray-300"
+              >
+                GET IT ON
+              </span>
+              <span class="text-base font-medium font-sans mt-0.5">
+                Google Play
+              </span>
             </div>
           </a>
 
@@ -49,12 +55,18 @@ import { RouterLink } from "vue-router";
             />
 
             <div class="flex flex-col leading-1 mt-1">
-              <span class="text-[10px] uppercase font-normal tracking-wider text-gray-300"> Download on the </span>
-              <span class="text-base font-medium font-sans mt-0.5"> App Store </span>
+              <span
+                class="text-[10px] uppercase font-normal tracking-wider text-gray-300"
+              >
+                Download on the
+              </span>
+              <span class="text-base font-medium font-sans mt-0.5">
+                App Store
+              </span>
             </div>
           </a>
-</div>
         </div>
+      </div>
 
       <div class="relative flex justify-center items-center mt-10 md:mt-0 z-10">
         <div
@@ -73,7 +85,6 @@ import { RouterLink } from "vue-router";
           alt="Aplikasi JTVHub"
           class="w-[400px] md:w-[500px] rounded-2xl shadow-lg transform -rotate-6 relative z-20"
         />
-      
       </div>
     </div>
   </div>

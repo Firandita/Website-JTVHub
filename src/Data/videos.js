@@ -1,7 +1,4 @@
-// src/data/videos.js
-
 export const videos = [
-  // === POJOK KAMPUNG (Ada 13 Video - Biar tombol Load More muncul) ===
   {
     id: 1,
     title: "Warga Surabaya Digegerkan Penemuan Ular Piton di Selokan",
