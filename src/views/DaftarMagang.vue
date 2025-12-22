@@ -1,119 +1,101 @@
 <template>
-  <section class="min-h-screen bg-gray-950 py-16 text-white font-sans">
+  <section class="min-h-screen bg-[#0F172A] py-16 text-white font-sans">
     <div class="max-w-6xl mx-auto px-4">
-      <h1 class="text-4xl font-extrabold text-center text-orange-500 mb-4">Program Magang JTV</h1>
-      <p class="text-center text-gray-400 mb-12">Temukan peluang magang yang sesuai dengan minat dan bakat Anda.</p>
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-extrabold text-orange-500 mb-4 tracking-tight">Program Magang JTV</h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+          Ingin berkarir di dunia media? Pilih posisi yang sesuai dan daftar secara eksklusif melalui aplikasi <span class="text-orange-400 font-bold">JTVHub</span>.
+        </p>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
         <div
           v-for="(item, index) in magangList"
           :key="index"
-          :class="{ 
-            'opacity-70': item.sisa === 0 || item.sudahDaftar 
-          }"
-          class="bg-[#141A29] border border-[#1F2937] rounded-xl overflow-hidden shadow-2xl transition duration-300 transform hover:scale-[1.01]"
+          class="bg-[#1E293B] border border-slate-700 rounded-2xl overflow-hidden shadow-xl flex flex-col transition duration-300 hover:border-orange-500/50"
         >
-          <div class="p-6 pt-8"> <h2 class="text-xl font-bold mb-3 text-white">
-              {{ item.title }}
-            </h2>
-
-            <p class="text-sm text-gray-300 mb-1">
-                <span class="font-semibold text-orange-400">Mentor:</span> {{ item.mentor }}
-            </p>
-            <p class="text-sm text-gray-400 mb-4 italic h-10 overflow-hidden">
-                {{ item.deskripsiSingkat }}
-            </p>
-            
-            <div class="flex flex-wrap items-center gap-2 mt-1 mb-6">
-              <span class="px-3 py-1 rounded-full text-xs font-medium bg-[#0F2D52] text-[#FFFFFF]">
-                Kuot: {{ item.butuh }}
-              </span>
-              <span class="px-3 py-1 rounded-full text-xs font-medium bg-[#F6D44C] text-[#FFFFFF]">
-                Daftar: {{ item.daftar }}
-              </span>
-              <span
-                class="px-3 py-1 rounded-full text-xs font-semibold"
-                :class="
-                  item.sisa > 0 
-                    ? 'bg-[#00B0AD] text-bg-[#FFFFFF]' 
-                    : 'bg-[#E6427B] text-bg-[#FFFFFF]'
-                "
+          <div class="p-8 flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <h2 class="text-2xl font-bold text-white leading-tight">{{ item.title }}</h2>
+              <span 
+                :class="item.sisa > 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'"
+                class="px-3 py-1 rounded-full text-[10px] uppercase font-black tracking-widest border"
+                style="border-color: currentColor;"
               >
-                Sisa: {{ item.sisa }}
+                {{ item.sisa > 0 ? 'Tersedia' : 'Penuh' }}
               </span>
             </div>
 
-            <button
-              @click="openModal(item)"
-              class="w-full py-3 rounded-lg font-semibold transition duration-200"
-              :disabled="item.sisa === 0 || item.sudahDaftar"
-              :class="[
-                item.sisa === 0
-                  ? 'bg-gray-600 text-gray-300 cursor-not-allowed' // Penuh
-                  : item.sudahDaftar
-                  ? 'bg-orange-900 text-gray-300 cursor-not-allowed' // Sudah Daftar
-                  : 'bg-orange-600 text-white cursor-pointer hover:bg-orange-700', // Daftar Sekarang
-              ]"
-            >
-              <span v-if="item.sisa === 0">Penuh</span>
-              <span v-else-if="item.sudahDaftar">Sudah Daftar</span>
-              <span v-else>Daftar Sekarang</span>
-            </button>
+            <p class="text-sm text-gray-300 mb-2">
+              <span class="font-semibold text-orange-400">Mentor:</span> {{ item.mentor }}
+            </p>
+            <p class="text-sm text-gray-400 mb-6 italic line-clamp-2">
+              "{{ item.deskripsiSingkat }}"
+            </p>
             
+            <div class="flex flex-wrap gap-2 mb-8">
+              <div class="bg-slate-800 px-3 py-2 rounded-lg border border-slate-700">
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Kuota</p>
+                <p class="text-sm font-bold">{{ item.butuh }}</p>
+              </div>
+              <div class="bg-slate-800 px-3 py-2 rounded-lg border border-slate-700">
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Terisi</p>
+                <p class="text-sm font-bold text-blue-400">{{ item.daftar }}</p>
+              </div>
+              <div class="bg-slate-800 px-3 py-2 rounded-lg border border-slate-700">
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Sisa</p>
+                <p class="text-sm font-bold" :class="item.sisa > 0 ? 'text-green-400' : 'text-red-400'">{{ item.sisa }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 bg-slate-900/50 border-t border-slate-700">
+            <div class="text-center">
+              <p class="text-xs text-gray-400 mb-3 uppercase tracking-widest">Daftar Melalui Aplikasi</p>
+              <a 
+                :href="jtvHubLink" 
+                target="_blank" 
+                class="flex justify-center items-center gap-2 bg-orange-600 hover:bg-orange-700 py-3 rounded-xl transition-all shadow-lg shadow-orange-950/20 group"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M17.523 15.341l-3.103 2.113-3.103-2.113v-10.682l3.103-2.113 3.103 2.113v10.682zm-3.103-8.818l-1.552 1.057v5.341l1.552 1.057 1.551-1.057v-5.341l-1.551-1.057zm-6.207 8.818l-3.103 2.113-3.104-2.113v-10.682l3.104-2.113 3.103 2.113v10.682zm-3.103-8.818l-1.552 1.057v5.341l1.552 1.057 1.552-1.057v-5.341l-1.552-1.057z"/></svg>
+                <span class="font-bold text-sm text-white">Buka JTVHub</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 transition-opacity">
-      <div class="bg-gray-900 rounded-xl w-full max-w-lg p-8 shadow-3xl transform transition-transform duration-300 scale-100">
-          
-          <h2 class="text-2xl font-bold mb-4 text-orange-500">
-              Daftar Magang: {{ selectedJob.title }}
-          </h2>
-          <p class="text-gray-400 mb-6">
-              Unggah CV (Curriculum Vitae) terbaru Anda untuk melanjutkan proses pendaftaran magang.
-          </p>
-
-          <form @submit.prevent="submitCV">
-              <div class="mb-6">
-                  <label class="block text-gray-300 text-sm font-semibold mb-2" for="cv_upload">
-                      Unggah CV (Hanya file PDF, Max 2MB)
-                  </label>
-                  <input 
-                      type="file" 
-                      id="cv_upload" 
-                      accept=".pdf" 
-                      @change="handleFileUpload"
-                      class="block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-orange-500 file:text-white
-                          hover:file:bg-orange-600 transition"
-                      required
-                  />
-                  <p v-if="fileError" class="mt-2 text-sm text-red-500">{{ fileError }}</p>
+      <div class="mt-24 bg-gradient-to-br from-orange-600 to-orange-800 rounded-3xl p-10 shadow-2xl overflow-hidden relative">
+        <div class="relative z-10 md:flex items-center justify-between">
+          <div class="md:w-1/2 mb-8 md:mb-0">
+            <h2 class="text-3xl font-black mb-4 text-white">Cara Mendaftar Magang</h2>
+            <div class="space-y-4 text-white/90">
+              <div class="flex items-start gap-4">
+                <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">1</div>
+                <p>Unduh aplikasi <span class="font-bold underline">JTVHub</span> di Google Play Store atau App Store.</p>
               </div>
-
-              <div class="flex justify-end space-x-3">
-                  <button 
-                      type="button" 
-                      @click="closeModal"
-                      class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
-                  >
-                      Batal
-                  </button>
-                  <button 
-                      type="submit" 
-                      :disabled="!selectedFile"
-                      class="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-700 transition"
-                  >
-                      Kirim
-                  </button>
+              <div class="flex items-start gap-4">
+                <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">2</div>
+                <p>Masuk atau buat akun baru menggunakan email aktif Anda.</p>
               </div>
-          </form>
+              <div class="flex items-start gap-4">
+                <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">3</div>
+                <p>Pilih menu <span class="font-bold italic">"Karir & Magang"</span> pada halaman utama aplikasi dan kirim CV Anda.</p>
+              </div>
+            </div>
+          </div>
+          <div class="md:w-1/3 flex justify-center">
+            <div class="w-48 h-64 bg-slate-900 rounded-[2.5rem] border-[6px] border-slate-800 shadow-2xl flex flex-col items-center justify-center p-4 relative">
+                <div class="w-12 h-1 bg-slate-800 rounded-full mb-4"></div>
+                <div class="text-orange-500 font-black text-2xl mb-1 italic">jtv</div>
+                <div class="text-[8px] text-gray-500 mb-4 tracking-tighter uppercase font-bold">Digital Hub</div>
+                <div class="w-full bg-slate-800 h-2 rounded-full mb-2"></div>
+                <div class="w-2/3 bg-slate-800 h-2 rounded-full mb-8"></div>
+                <div class="w-full bg-orange-600 h-8 rounded-lg animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
       </div>
     </div>
   </section>
@@ -122,100 +104,33 @@
 <script setup>
 import { ref } from 'vue';
 
-// --- STATE MODAL ---
-const isModalOpen = ref(false);
-const selectedJob = ref({});
-const selectedFile = ref(null);
-const fileError = ref('');
-
-// --- LOGIKA MODAL ---
-
-const openModal = (job) => {
-    selectedJob.value = job;
-    selectedFile.value = null; // Reset file
-    fileError.value = ''; // Reset error
-    isModalOpen.value = true;
-};
-
-const closeModal = () => {
-    isModalOpen.value = false;
-};
-
-const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    selectedFile.value = null;
-    fileError.value = '';
-
-    if (file) {
-        // Cek Tipe File (hanya PDF)
-        if (file.type !== 'application/pdf') {
-            fileError.value = 'Hanya file PDF yang diizinkan.';
-            event.target.value = null; // Hapus file dari input
-            return;
-        }
-
-        // Cek Ukuran File (Max 2MB)
-        if (file.size > 2 * 1024 * 1024) { 
-            fileError.value = 'Ukuran file maksimal 2MB.';
-            event.target.value = null;
-            return;
-        }
-
-        selectedFile.value = file;
-    }
-};
-
-const submitCV = () => {
-    if (selectedFile.value) {
-        console.log(`Mengirim CV untuk posisi: ${selectedJob.value.title}`);
-        console.log('File yang akan diunggah:', selectedFile.value);
-        
-        // Di sini nanti Anda akan menambahkan logika untuk:
-        // 1. Mengirim file ke API (backend) menggunakan FormData.
-        // 2. Mengubah status magang di frontend menjadi "Sudah Daftar".
-        
-        alert(`Magang ${selectedJob.value.title} berhasil diajukan dengan file: ${selectedFile.value.name}`);
-
-        // Ubah status lokal (simulasi pendaftaran berhasil)
-        const jobIndex = magangList.value.findIndex(job => job.title === selectedJob.value.title);
-        if (jobIndex !== -1) {
-             magangList.value[jobIndex].sudahDaftar = true;
-        }
-
-        closeModal();
-    }
-};
-
+// --- LINK APLIKASI ---
+// Ganti URL di bawah ini dengan link download aplikasi JTVHub yang sebenarnya
+const jtvHubLink = ref('https://play.google.com/store/apps/details?id=com.jtv.jtvhub');
 
 // --- DATA MAGANG ---
 const magangList = ref([
     {
         title: "Reporter / Jurnalis",
-        image: "/images/magang1.jpg", 
         butuh: 4,
         daftar: 3,
         sisa: 1,
-        sudahDaftar: false,
         mentor: "Bapak Rahmat Hidayat",
         deskripsiSingkat: "Melakukan liputan berita lapangan dan membuat script/naskah berita harian.",
     },
     {
         title: "Video Editor",
-        image: "/images/magang2.jpg",
         butuh: 5,
         daftar: 5,
         sisa: 0,
-        sudahDaftar: false,
         mentor: "Ibu Dian Pratiwi, S.Kom",
         deskripsiSingkat: "Mengedit materi visual program TV dan digital menggunakan Adobe Premiere Pro.",
     },
     {
         title: "Cameraman",
-        image: "/images/magang3.jpg",
         butuh: 3,
         daftar: 1,
         sisa: 2,
-        sudahDaftar: true,
         mentor: "Tim Produksi Lapangan JTV",
         deskripsiSingkat: "Bertanggung jawab atas kualitas visual dan pengambilan gambar di studio maupun luar studio.",
     },
@@ -223,5 +138,10 @@ const magangList = ref([
 </script>
 
 <style scoped>
-/* Anda bisa menambahkan gaya non-Tailwind di sini jika diperlukan */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical; 
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 </style>
