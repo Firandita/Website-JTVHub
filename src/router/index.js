@@ -34,15 +34,7 @@ const router = createRouter({
       name: "DaftarMagang",
       component: DaftarMagang,
     },
-    // DINONAKTIFKAN SEMENTARA: Akan menyebabkan ERROR karena MagangApplyForm belum ada.
-    /* {
-        path: "/apply/:id", 
-        name: "MagangApply",
-        component: MagangApplyForm,
-        props: true
-    }, */
 
-    // --- Rute Login ---
     {
       path: "/login",
       name: "login",
@@ -52,14 +44,6 @@ const router = createRouter({
         hideFooter: true,
       },
     },
-
-    // Opsional: Rute Catch-all (404 Not Found)
-    // ❌ DINONAKTIFKAN SEMENTARA: Akan menyebabkan ERROR karena NotFound.vue belum ada.
-    /* {
-      path: '/:catchAll(.*)',
-      name: 'NotFound',
-      component: () => import('../views/NotFound.vue') // Asumsi Anda punya komponen NotFound.vue
-    } */
   ],
 });
 
