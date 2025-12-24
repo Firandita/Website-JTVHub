@@ -1,168 +1,351 @@
 <script setup>
-// 1. IMPORT YANG WAJIB ADA
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router'; // <--- Kamu lupa ini tadi
+import { useRoute, useRouter } from 'vue-router'; 
+// IMPORT INI PENTING:
+import { useAuth } from '../useAuth'; 
 
-// 2. DEFINISIKAN ROUTE
-const route = useRoute(); // <--- Ini juga lupa, makanya error "route is undefined"
+const route = useRoute();
+const router = useRouter(); 
+// AMBIL FUNGSI LOGIN DARI USEAUTH
+const { login } = useAuth();
 
 const isRegister = ref(false);
+const loginMethod = ref('password'); 
 
-// Data Form
 const form = ref({
   fullName: '',
-  username: '',
   email: '',
+  birthDate: '',
+  gender: '',
   password: '',
   confirmPassword: ''
 });
 
-// Fungsi Toggle (Slider)
 const toggleMode = (mode) => {
   isRegister.value = mode === 'register';
+  if(mode === 'login') loginMethod.value = 'password';
 };
 
-// Cek URL saat halaman dibuka (Login vs Register)
 onMounted(() => {
-  // Pastikan route sudah siap sebelum dicek
   if (route.query.mode === 'register') {
     isRegister.value = true; 
   }
 });
 
+// --- LOGIC MOCKING DATA (LOGIN/REGISTER) ---
 const handleSubmit = () => {
-  if(isRegister.value) {
-    console.log("Melakukan Register...", form.value);
+  let displayName = '';
+
+  if (isRegister.value) {
+    displayName = form.value.fullName;
   } else {
-    console.log("Melakukan Login...", { email: form.value.email, password: form.value.password });
+    // Ambil nama dari depan email
+    const emailName = form.value.email.split('@')[0];
+    displayName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
   }
+
+  const initial = displayName.charAt(0).toUpperCase();
+
+  // MOCK DATA USER
+  const fakeUser = {
+    id: Date.now(),
+    name: displayName,      
+    email: form.value.email,
+    initial: initial,
+    // Tambahan avatar biar keren dikit (opsional, bisa dihapus kalau gamau)
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`, 
+    isLoggedIn: true
+  };
+
+  // --- BAGIAN INI SAYA UBAH SUPAYA KONEK KE NAVBAR ---
+  // Panggil fungsi login() dari useAuth.js
+  login(fakeUser);
+  // ---------------------------------------------------
+
+  // Feedback sederhana
+  if(isRegister.value) {
+    alert(`Akun berhasil dibuat! Selamat datang, ${displayName}.`);
+  } else {
+    console.log("Login sukses sebagai:", displayName);
+  }
+  
+  // Redirect ke halaman live
+  router.push('/live'); 
 };
 </script>
 
 <template>
-  <div class="min-h-screen w-full flex bg-black overflow-hidden">
-    
+  <div class="min-h-screen w-full flex bg-black overflow-hidden font-sans">
     <div class="hidden lg:block lg:w-1/2 relative">
-      
-      <img 
-        src="/gedung-jtv.JPG" 
-        alt="Gedung JTV" 
+      <img
+        src="/gedung-jtv.JPG"
+        alt="Gedung JTV"
         class="absolute inset-0 w-full h-full object-cover"
       />
-
-      <div class="absolute inset-0 bg-gradient-to-r from-black/20 via-black/50 to-black"></div>
-
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black/20 via-black/50 to-black"
+      ></div>
       <div class="absolute bottom-20 left-12 z-10 max-w-md">
         <h1 class="text-5xl font-bold text-white mb-4 leading-tight">
-          Hiburan Jawa Timur <br> <span class="text-white">Dalam Genggaman.</span>
+          Hiburan Jawa Timur <br />
+          <span class="text-orange-500">Dalam Genggaman.</span>
         </h1>
         <p class="text-gray-300 text-lg">
-          Nikmati ribuan konten lokal, berita terkini, dan live streaming eksklusif hanya di JTVHub.
+          Satu akun untuk semua akses. Nikmati konten lokal, berita, dan live
+          streaming di Web & Aplikasi JTVHub.
         </p>
       </div>
     </div>
 
-    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-black relative">
-      
-      <div class="absolute top-0 right-0 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+    <div
+      class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 bg-black relative overflow-y-auto overflow-x-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"
+      ></div>
 
-      <div class="w-full max-w-md z-10">
-        
-        <div class="text-center mb-10">
-          <img src="/jtv_putih.png" alt="Logo JTV" class="h-12 mx-auto mb-6">
+      <div class="w-full max-w-md z-10 py-10">
+        <div class="text-center mb-8">
+          <img src="/jtv_putih.png" alt="Logo JTV" class="h-10 mx-auto mb-4" />
           <h2 class="text-3xl font-bold text-white mb-2">
-            {{ isRegister ? 'Bergabung Sekarang' : 'Selamat Datang' }}
+            {{ isRegister ? "Gabung JTVHub" : "Selamat Datang" }}
           </h2>
-          <p class="text-gray-400">
-            {{ isRegister ? 'Lengkapi data diri untuk membuat akun baru' : 'Masukan detail akun anda untuk melanjutkan' }}
+          <p class="text-gray-400 text-sm">
+            {{
+              isRegister
+                ? "Satu akun untuk Web dan Aplikasi Mobile"
+                : "Masuk untuk melanjutkan aktivitas anda"
+            }}
           </p>
         </div>
 
-        <div class="bg-gray-900 p-1 rounded-full mb-8 relative flex h-12 border border-gray-800">
-          <div 
+        <div
+          class="bg-gray-900 p-1 rounded-full mb-8 relative flex h-12 border border-gray-800"
+        >
+          <div
             class="absolute top-1 bottom-1 rounded-full bg-orange-600 transition-all duration-300 shadow-lg"
             :class="isRegister ? 'left-1/2 right-1' : 'left-1 right-1/2'"
           ></div>
-          
-          <button 
+
+          <button
             @click="toggleMode('login')"
             class="w-1/2 relative z-10 text-sm font-bold transition-colors duration-300 focus:outline-none"
-            :class="!isRegister ? 'text-white' : 'text-gray-400 hover:text-white'"
+            :class="
+              !isRegister ? 'text-white' : 'text-gray-400 hover:text-white'
+            "
           >
             Masuk
           </button>
-
-          <button 
+          <button
             @click="toggleMode('register')"
             class="w-1/2 relative z-10 text-sm font-bold transition-colors duration-300 focus:outline-none"
-            :class="isRegister ? 'text-white' : 'text-gray-400 hover:text-white'"
+            :class="
+              isRegister ? 'text-white' : 'text-gray-400 hover:text-white'
+            "
           >
             Daftar
           </button>
         </div>
 
-        <form @submit.prevent="handleSubmit" class="space-y-5">
-          
-          <div v-if="isRegister" class="space-y-1 animate-fade-in">
-            <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">Nama Lengkap</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" /></svg>
-              </div>
-              <input v-model="form.fullName" type="text" class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block pl-12 p-3.5 placeholder-gray-600 transition-all outline-none" placeholder="Nama Lengkap Anda" required>
-            </div>
+        <div v-if="!isRegister" class="animate-fade-in">
+          <div class="flex justify-center gap-4 mb-6">
+            <button
+              @click="loginMethod = 'password'"
+              class="pb-2 text-sm font-semibold transition-colors border-b-2"
+              :class="
+                loginMethod === 'password'
+                  ? 'text-white border-orange-500'
+                  : 'text-gray-500 border-transparent hover:text-gray-300'
+              "
+            >
+              Kata Sandi
+            </button>
+            <button
+              @click="loginMethod = 'qr'"
+              class="pb-2 text-sm font-semibold transition-colors border-b-2"
+              :class="
+                loginMethod === 'qr'
+                  ? 'text-white border-orange-500'
+                  : 'text-gray-500 border-transparent hover:text-gray-300'
+              "
+            >
+              QR Code (App)
+            </button>
           </div>
 
-          <div v-if="isRegister" class="space-y-1 animate-fade-in">
-            <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">Username</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500"><path d="M11.584 2.376a.75.75 0 01.832 0l9 6a.75.75 0 11-.832 1.248L12 3.901 3.416 9.624a.75.75 0 01-.832-1.248l9-6z" /><path fill-rule="evenodd" d="M20.25 10.332v9.918H21a.75.75 0 010 1.5H3a.75.75 0 010-1.5h.75v-9.918a.75.75 0 01.634-.74A49.109 49.109 0 0112 9c2.59 0 5.134.202 7.616.592a.75.75 0 01.634.74zm-7.5-5.023a19.52 19.52 0 00-6.5 1.771v9.92h11.5v-9.92a19.358 19.358 0 00-5-1.77zm-2.25 5.441a.75.75 0 010 1.5h-1.5a.75.75 0 010-1.5h1.5z" clip-rule="evenodd" /></svg>
-              </div>
-              <input v-model="form.username" type="text" class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block pl-12 p-3.5 placeholder-gray-600 transition-all outline-none" placeholder="@username" required>
-            </div>
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">Email Address</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" /><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" /></svg>
-              </div>
-              <input v-model="form.email" type="email" class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block pl-12 p-3.5 placeholder-gray-600 transition-all outline-none" placeholder="nama@email.com" required>
-            </div>
-          </div>
-
-          <div class="space-y-1">
-            <div class="flex justify-between">
-                <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">Password</label>
-                <a v-if="!isRegister" href="#" class="text-xs font-bold text-orange-500 hover:text-orange-400">Lupa Password?</a>
-            </div>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" /></svg>
-              </div>
-              <input v-model="form.password" type="password" class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block pl-12 p-3.5 placeholder-gray-600 transition-all outline-none" placeholder="••••••••" required>
-            </div>
-          </div>
-
-          <div v-if="isRegister" class="space-y-1 animate-fade-in">
-            <label class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider">Konfirmasi Password</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-500"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" /></svg>
-              </div>
-              <input v-model="form.confirmPassword" type="password" class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block pl-12 p-3.5 placeholder-gray-600 transition-all outline-none" placeholder="Ulangi password" required>
-            </div>
-          </div>
-
-          <button 
-            type="submit" 
-            class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-900/20 transition-all transform hover:scale-[1.02] active:scale-95 mt-4"
+          <form
+            v-if="loginMethod === 'password'"
+            @submit.prevent="handleSubmit"
+            class="space-y-5 animate-fade-in"
           >
-            {{ isRegister ? 'Buat Akun Baru' : 'Masuk Sekarang' }}
-          </button>
+            <div class="space-y-1">
+              <label
+                class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+                >Email</label
+              >
+              <div class="relative">
+                <input
+                  v-model="form.email"
+                  type="text"
+                  class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3.5 placeholder-gray-600 transition-all outline-none"
+                  placeholder="Masukan email"
+                  required
+                />
+              </div>
+            </div>
 
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <label
+                  class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+                  >Password</label
+                >
+                <a
+                  href="#"
+                  class="text-xs font-bold text-orange-500 hover:text-orange-400"
+                  >Lupa Password?</a
+                >
+              </div>
+              <div class="relative">
+                <input
+                  v-model="form.password"
+                  type="password"
+                  class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3.5 placeholder-gray-600 transition-all outline-none"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-900/20 transition-all transform hover:scale-[1.02] active:scale-95 mt-4"
+            >
+              Masuk Sekarang
+            </button>
+          </form>
+
+          <div
+            v-else
+            class="flex flex-col items-center justify-center animate-fade-in bg-gray-900/50 p-6 rounded-2xl border border-gray-800"
+          >
+            <div class="bg-white p-2 rounded-lg mb-4">
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=JTVHubLoginSimulasi"
+                alt="Scan Login"
+                class="w-40 h-40"
+              />
+            </div>
+            <h3 class="text-white font-bold text-lg mb-2">
+              Login via Aplikasi
+            </h3>
+            <ol
+              class="text-gray-400 text-sm list-decimal list-inside space-y-1 text-center"
+            >
+              <li>Buka aplikasi <strong>JTVHub</strong> di HP kamu</li>
+              <li>Buka menu <strong>Scan QR</strong></li>
+              <li>Arahkan kamera ke kode di atas</li>
+            </ol>
+          </div>
+        </div>
+
+        <form
+          v-else
+          @submit.prevent="handleSubmit"
+          class="space-y-4 animate-fade-in"
+        >
+          <div class="space-y-1">
+            <label
+              class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+              >Nama Lengkap</label
+            >
+            <input
+              v-model="form.fullName"
+              type="text"
+              class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none"
+              placeholder="Nama Lengkap Anda"
+              required
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label
+                class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+                >Tgl Lahir</label
+              >
+              <input
+                v-model="form.birthDate"
+                type="date"
+                class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none [color-scheme:dark]"
+                required
+              />
+            </div>
+            <div class="space-y-1">
+              <label
+                class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+                >Jenis Kelamin</label
+              >
+              <select
+                v-model="form.gender"
+                class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none appearance-none"
+                required
+              >
+                <option value="" disabled selected>Pilih...</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label
+              class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+              >Email Address</label
+            >
+            <input
+              v-model="form.email"
+              type="email"
+              class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none"
+              placeholder="nama@email.com"
+              required
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label
+              class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+              >Password</label
+            >
+            <input
+              v-model="form.password"
+              type="password"
+              class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <div class="space-y-1">
+            <label
+              class="text-xs font-bold text-gray-400 ml-1 uppercase tracking-wider"
+              >Ulangi Password</label
+            >
+            <input
+              v-model="form.confirmPassword"
+              type="password"
+              class="w-full bg-gray-900/50 border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent block px-4 py-3 placeholder-gray-600 transition-all outline-none"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-900/20 transition-all transform hover:scale-[1.02] active:scale-95 mt-2"
+          >
+            Buat Akun Baru
+          </button>
         </form>
       </div>
     </div>
@@ -171,10 +354,23 @@ const handleSubmit = () => {
 
 <style scoped>
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.4s ease-out;
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
 }
 </style>

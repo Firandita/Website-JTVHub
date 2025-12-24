@@ -164,9 +164,18 @@ const currentVideos = computed(() => {
   <div class="min-h-screen bg-black text-white font-roboto">
     
     <header class="relative h-64 md:h-80 bg-[#0F2D52] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
-        <h1 class="text-4xl md:text-6xl font-bold text-white relative z-10 tracking-wider">EVENT</h1>
-    </header>
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-900 to-black opacity-80"></div>
+    
+    <div class="relative z-10 text-center px-4 animate-fade-in">
+        <h1 class="text-4xl md:text-6xl font-bold text-white tracking-wider mb-3">
+            EVENT
+        </h1>
+        
+        <p class="text-white text-sm md:text-lg max-w-xl mx-auto font-normal leading-relaxed opacity-90">
+            Nikmati pengalaman menonton yang lebih seru, lancar, dan eksklusif lewat <span class="font-semibold">Aplikasi JTVHub</span>.
+        </p>
+    </div>
+</header>
 
     <main class="container mx-auto px-4 md:px-16 py-10">
 

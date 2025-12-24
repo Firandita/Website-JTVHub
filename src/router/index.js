@@ -7,13 +7,7 @@ import Event from "../views/Event.vue";
 import JTVCommunity from "../views/JTVCommunity.vue";
 import SocialMedia from "../views/SocialMedia.vue";
 import AuthView from "../views/AuthView.vue";
-
-// --- IMPOR YANG PERLU DITAMBAHKAN ---
 import DaftarMagang from "../views/DaftarMagang.vue";
-// DINONAKTIFKAN SEMENTARA: Akan menyebabkan ERROR karena file MagangApplyForm.vue belum ada.
-// import MagangApplyForm from "../views/MagangApplyForm.vue";
-// Opsional: Untuk halaman 404
-// import NotFound from '../views/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,8 +21,6 @@ const router = createRouter({
     { path: "/event", name: "event", component: Event },
     { path: "/community", name: "community", component: JTVCommunity },
     { path: "/social", name: "social", component: SocialMedia },
-
-    // --- Rute Magang ---
     {
       path: "/daftar-magang",
       name: "DaftarMagang",
