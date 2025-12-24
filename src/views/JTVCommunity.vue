@@ -7,7 +7,7 @@ const careerItems = [
     buttonText: 'Daftar Magang',
     type: 'internal',               
     url: '/daftar-magang',
-    image: '/magang.png' // <-- File gambar untuk kartu pertama
+    image: '/magang.png' 
   },
   { 
     title: 'Kunjungan', 
@@ -15,7 +15,31 @@ const careerItems = [
     buttonText: 'Daftar Kunjungan',
     type: 'external',               
     url: 'https://google.com',
-    image: '/karir.png' // <-- File gambar untuk kartu kedua (Ganti sesuai nama file Anda)
+    image: '/karir.png' 
+  },
+];
+
+// Data Dummy untuk Group WhatsApp (Jelajahi Lebih Banyak)
+const communityItems = [
+  { 
+    title: 'Transportasi Publik', 
+    link: 'https://chat.whatsapp.com/ContohLink1', 
+    image: '/member.png' 
+  },
+  { 
+    title: 'Teknologi & IT', 
+    link: 'https://chat.whatsapp.com/ContohLink2', 
+    image: '/member.png' 
+  },
+  { 
+    title: 'Seni & Budaya', 
+    link: 'https://chat.whatsapp.com/ContohLink3', 
+    image: '/member.png' 
+  },
+  { 
+    title: 'Komunitas Film', 
+    link: 'https://chat.whatsapp.com/ContohLink4', 
+    image: '/member.png' 
   },
 ];
 </script>
@@ -34,7 +58,6 @@ const careerItems = [
         <h2 class="text-3xl font-bold mb-8 text-center text-white">Magang dan Karir</h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
           <div 
             v-for="(item, index) in careerItems" 
             :key="index" 
@@ -68,10 +91,8 @@ const careerItems = [
               >
                 {{ item.buttonText }}
               </a>
-
             </div>
           </div>
-          
         </div>
       </section>
 
@@ -81,20 +102,26 @@ const careerItems = [
         <h2 class="text-3xl font-bold mb-8 text-center text-white">Jelajahi lebih banyak</h2>
         
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          <div v-for="i in 4" :key="i" class="bg-gray-900 rounded-xl overflow-hidden flex flex-col">
+          <div 
+            v-for="(community, index) in communityItems" 
+            :key="index" 
+            class="bg-gray-900 rounded-xl overflow-hidden flex flex-col"
+          >
             <div class="h-40 bg-gray-800">
-              <img src="/member.png" alt="member" class="w-full h-full object-cover">
+              <img :src="community.image" :alt="community.title" class="w-full h-full object-cover">
             </div>
             
             <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-300 truncate">Transportasi Publik</h3>
-              <button class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700">
+              <h3 class="text-lg font-semibold text-gray-300 truncate">{{ community.title }}</h3>
+              <a 
+                :href="community.link" 
+                target="_blank"
+                class="mt-2 px-4 py-1 text-xs font-medium text-white bg-orange-600 rounded-full hover:bg-orange-700 inline-block text-center transition duration-150"
+              >
                 Join WA Group
-              </button>
+              </a>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -102,19 +129,12 @@ const careerItems = [
         <h2 class="text-3xl font-bold mb-8 text-center text-white">Partner</h2>
         
         <div class="flex justify-center space-x-12">
-          <div class="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-sm text-gray-400">
-            Logo 1
-          </div>
-          <div class="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-sm text-gray-400">
-            Logo 2
-          </div>
-          <div class="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-sm text-gray-400">
-            Logo 3
+          <div v-for="n in 3" :key="n" class="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-sm text-gray-400">
+            Logo {{ n }}
           </div>
         </div>
       </section>
       
     </main>
-
   </div>
 </template>
